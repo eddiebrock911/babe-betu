@@ -1,4 +1,3 @@
-
 /* ===== PASSWORD ===== */
 const CORRECT_PASSWORD = "naincy"; // 🔑 Change this password!
 
@@ -176,3 +175,42 @@ function closeZoom() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeZoom(); });
+
+/* ===== THEME TOGGLE ===== */
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.querySelector('.theme-toggle');
+  const icon = btn ? btn.querySelector('i') : null;
+  const isLight = body.getAttribute('data-theme') === 'light';
+
+  if (isLight) {
+    body.removeAttribute('data-theme');
+    if (icon) { icon.className = 'fas fa-moon'; }
+    localStorage.setItem('theme', 'dark');
+  } else {
+    body.setAttribute('data-theme', 'light');
+    if (icon) { icon.className = 'fas fa-sun'; }
+    localStorage.setItem('theme', 'light');
+  }
+}
+
+// On page load, restore saved theme
+(function applySavedTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.body.setAttribute('data-theme', 'light');
+    // icon will be set once DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      const icon = document.querySelector('.theme-toggle i');
+      if (icon) icon.className = 'fas fa-sun';
+    });
+  }
+})();
+
+// ========== Back to Top Button ==========
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}

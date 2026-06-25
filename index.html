@@ -65,6 +65,10 @@
     </button>
   </nav>
 
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+      <i class="fas fa-moon"></i>
+  </button>
+
   <!-- Hidden audio element -->
   <audio id="bg-music" loop>
     <!-- Add your mp3 URL here as: <source src="your-song.mp3" type="audio/mpeg"> -->
@@ -215,21 +219,21 @@
 
           <div class="slide" id="slide-1">
             <div style="text-align:center;color:rgba(255,255,255,0.4);font-family:'DM Sans';font-size:14px;padding:24px">
-              <img src="images\photo6.jpeg" alt="Photo 2" />
+              <img src="images\photo7.jpeg" alt="Photo 2" />
             </div>
             <div class="slide-caption-bar">Every moment with you ✨</div>
           </div>
 
           <div class="slide" id="slide-2">
             <div style="text-align:center;color:rgba(255,255,255,0.4);font-family:'DM Sans';font-size:14px;padding:24px">
-              <img src="images\photo3.jpeg" alt="Photo 3" />
+              <img src="images\photo6.jpeg" alt="Photo 3" />
             </div>
             <div class="slide-caption-bar">You make me smile 💕</div>
           </div>
 
           <div class="slide" id="slide-3">
             <div style="text-align:center;color:rgba(255,255,255,0.4);font-family:'DM Sans';font-size:14px;padding:24px">
-              <img src="images\photo4.jpeg" alt="Photo 4" />
+              <img src="images\photo8.jpeg" alt="Photo 4" />
             </div>
             <div class="slide-caption-bar">Always & forever 🌹</div>
           </div>
@@ -316,6 +320,30 @@
 
 </div><!-- /main-content -->
 
+<!-- Floating Contact -->
+  <a href="https://www.instagram.com/__ankit._.op_/" target="_blank" class="floating-contact-betu" rel="noopener">
+    <i class="fab fa-instagram"></i>
+    <span>Betu ❤️</span>
+  </a>
+
+  <a href="https://www.instagram.com/naincy__raman_/" target="_blank" class="floating-contact-babe" rel="noopener">
+    <i class="fab fa-instagram"></i>
+    <span>Babe 💕</span>
+  </a>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" onclick="scrollToTop()" aria-label="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="lightbox-content" id="lightboxContent"></div>
+  </div>
 
 </body>
 </html>
