@@ -37,6 +37,12 @@
   gtag('config', 'G-CKVS3DGNZ7');
 </script>
 
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="live-chat.js" defer></script>
+
+
+
 <script src="script.js" defer></script>
 </head>
 <body>
@@ -308,6 +314,29 @@
         </div>
       </div>
     </section>
+
+  <!--Live Chating -->
+  <div class="chat-toggle-btn" onclick="toggleChat()">
+  <span id="chat-toggle-icon">💬</span>
+</div>
+
+<div class="chat-box" id="chat-box">
+  <div class="chat-header">
+    <span class="chat-avatar">💕</span>
+    <div>
+      <p class="chat-title">Our Little World</p>
+      <p class="chat-status"><span class="status-dot"></span> <span id="online-status">connecting...</span></p>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages"></div>
+
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()" />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+</div>
 
     <!-- LOVE NOTES -->
     <section class="notes-section reveal">
