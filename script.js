@@ -1,5 +1,5 @@
 /* ===== PASSWORD ===== */
-const CORRECT_PASSWORD = "naincy"; // 🔑 Change this password!
+const CORRECT_PASSWORD = "iloveyou"; // 🔑 Change this password!
 
 function checkPassword() {
   const val = document.getElementById('pw-input').value.trim().toLowerCase();
