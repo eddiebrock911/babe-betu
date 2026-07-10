@@ -29,7 +29,7 @@ function togglePwVisibility() {
   if (!input) return;
   const show = input.type === "password";
   input.type = show ? "text" : "password";
-  if (btn) btn.textContent = show ? "🙈" : "👁";
+  if (btn) btn.textContent = show ? "🙈" : "👁️";
 }
 
 function checkPassword() {
@@ -39,11 +39,7 @@ function checkPassword() {
 
   const val = input.value.trim().toLowerCase().replace(/\s+/g, "");
   const ok =
-    val === CORRECT_PASSWORD ||
-    val === "naincy" ||
-    val === "ankitnaincy" ||
-    val === "iloveyou" ||
-    val === "naincyankit";
+    val === CORRECT_PASSWORD;
 
   if (ok) {
     unlockWorld();
@@ -361,16 +357,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (icon) icon.className = "fas fa-sun";
   }
 
-  // Auto-unlock if already unlocked this session
-  if (sessionStorage.getItem("naincykit_unlocked") === "1") {
-    const screen = document.getElementById("password-screen");
-    const main = document.getElementById("main-content");
-    if (screen) screen.classList.add("unlocked");
-    if (main) main.classList.add("visible");
-    initHearts();
-    startCounter();
-    observeReveals();
-  }
+  // // Auto-unlock if already unlocked this session isse baar baar password nahi dalna padega
+
+  
+  // if (sessionStorage.getItem("naincykit_unlocked") === "1") {
+  //   const screen = document.getElementById("password-screen");
+  //   const main = document.getElementById("main-content");
+  //   if (screen) screen.classList.add("unlocked");
+  //   if (main) main.classList.add("visible");
+  //   initHearts();
+  //   startCounter();
+  //   observeReveals();
+  // }
 
   // Focus password input
   const pw = document.getElementById("pw-input");
