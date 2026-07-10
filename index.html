@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ankit Kumar — Girlfriend Naincy's Little World 💕 | A special website made with love for my girlfriend Naincy.">
+<meta name="keywords" content="Ankit Kumar, Naincy and Ankit, Girlfriend, Love, Special Website, Romantic, Personal Website, Love Story, Memories">
+<meta name="author" content="Ankit Kumar">
+
+<meta property="og:title" content="Ankit and Naincy | For Girlfriend 💕">
+<meta property="og:description" content="For My Beautiful Girlfriend 💕 — A little world made with love.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://naincykit.onrender.com">
+
+<title>Ankit & Naincy 💕</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="images/naincy.png">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKVS3DGNZ7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKVS3DGNZ7');
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script src="live-chat.js" defer></script>
+<script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ===== PASSWORD SCREEN ===== -->
+<div id="password-screen">
+  <div class="pw-stars" id="pw-stars"></div>
+  <div class="pw-card" id="pw-card">
+    <span class="pw-lock-icon">🔐</span>
+    <h1 class="pw-title">Enter Our Secret</h1>
+    <p class="pw-subtitle">This little world was made just for you 💕</p>
+    <div class="pw-input-wrap">
+      <input
+        type="password"
+        class="pw-input"
+        id="pw-input"
+        placeholder="Enter password..."
+        autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkPassword()"
+      />
+      <button class="pw-toggle" onclick="togglePwVisibility()" id="pw-toggle" type="button" aria-label="Show password">👁</button>
+    </div>
+    <button class="pw-btn" onclick="checkPassword()" type="button">Open My World 💫</button>
+    <p class="pw-error" id="pw-error"></p>
+    <p class="pw-hint">Hint: it might be something special <b>me</b> between <b>you</b> 💌</p>
+  </div>
+</div>
+
+<!-- ===== ZOOM OVERLAY ===== -->
+<div class="zoom-overlay" id="zoom-overlay" onclick="closeZoom()">
+  <img src="" id="zoom-img" alt="Zoomed photo" />
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div id="main-content">
+
+  <!-- Cosmic Background -->
+  <div class="cosmic-bg" id="cosmic-bg">
+    <div class="orb" style="width:520px;height:520px;background:#9c27b0;top:-120px;left:-160px;--od:14s;--tx:40px;--ty:50px;--sc:1.15"></div>
+    <div class="orb" style="width:420px;height:420px;background:#e91e63;bottom:-120px;right:-120px;--od:18s;--tx:-30px;--ty:-45px;--sc:1.12"></div>
+    <div class="orb" style="width:320px;height:320px;background:#673ab7;top:38%;left:58%;--od:11s;--tx:25px;--ty:30px;--sc:1.2"></div>
+    <div class="orb" style="width:200px;height:200px;background:#ff6b9d;top:70%;left:15%;--od:16s;--tx:-15px;--ty:20px;--sc:1.1"></div>
+  </div>
+
+  <!-- Floating hearts -->
+  <div class="hearts-layer" id="hearts-layer"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav-logo" href="#">Our Little World Naincy 💕</a>
+    <div class="nav-actions">
+      <button class="music-btn" id="music-btn" onclick="toggleMusic()" type="button">
+        <span class="music-note" id="music-note">♪</span>
+        <span class="music-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span id="music-label">Play Music</span>
+      </button>
+      <button class="theme-toggle" onclick="toggleTheme()" type="button" aria-label="Toggle Theme">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hidden audio -->
+  <audio id="bg-music" loop preload="none">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="page-wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <p class="hero-eyebrow">✦ Made just for you ✦</p>
+      <h1 class="hero-title">
+        You are my <em>beautiful</em><br>little world 🌸
+      </h1>
+      <p class="hero-quote">
+        "Some people make life beautiful just by being in it ✨<br>
+        You are that person, for me, every single day."
+      </p>
+
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-frame">
+          <div class="hero-photo-inner" onclick="openZoom(this)" role="button" tabindex="0" aria-label="View photo">
+            <div class="upload-placeholder">
+              <img src="images/naincy.png" alt="Naincy" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-cue">
+        <span>SCROLL</span>
+        <span class="scroll-arrow">↓</span>
+      </div>
+    </section>
+
+    <!-- DAYS TOGETHER COUNTER -->
+    <section class="counter-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ together since ✦</span>
+        <h2 class="section-title">Our <em>Beautiful</em> Journey</h2>
+      </div>
+
+      <div class="glass-card counter-card">
+        <div class="counter-grid">
+          <div class="counter-box">
+            <div class="counter-num" id="c-days">0</div>
+            <div class="counter-label">Days</div>
+          </div>
+          <div class="counter-box">
+            <div class="counter-num" id="c-hours">00</div>
+            <div class="counter-label">Hours</div>
+          </div>
+          <div class="counter-box">
+            <div class="counter-num" id="c-mins">00</div>
+            <div class="counter-label">Mins</div>
+          </div>
+          <div class="counter-box">
+            <div class="counter-num" id="c-secs">00</div>
+            <div class="counter-label">Secs</div>
+          </div>
+        </div>
+        <p class="counter-since">Since <b>May 29, 2026</b> · Friday · 8:17 PM 💕</p>
+      </div>
+    </section>
+
+    <!-- LOVE TIMELINE -->
+    <section class="timeline-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ chapters ✦</span>
+        <h2 class="section-title">Our <em>Love</em> Timeline</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">The Beginning</div>
+          <h3 class="timeline-title">When Our Eyes Met ✨</h3>
+          <p class="timeline-text">A moment that felt ordinary — until it rewrote everything.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">May 29, 2026</div>
+          <h3 class="timeline-title">We Became Us 💕</h3>
+          <p class="timeline-text">8:17 PM — the second my world found its favorite person.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Every Day After</div>
+          <h3 class="timeline-title">Little Moments 🌸</h3>
+          <p class="timeline-text">Laughs, late talks, quiet comfort — magic in ordinary days.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Forever Ahead</div>
+          <h3 class="timeline-title">Still Writing Our Story 🌙</h3>
+          <p class="timeline-text">This is only the beginning of a beautiful forever.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- POLAROID GALLERY -->
+    <section class="gallery-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ memories ✦</span>
+        <h2 class="section-title">Our <em>Beautiful</em> Moments</h2>
+      </div>
+
+      <div class="polaroid-grid" id="polaroid-grid">
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo1.jpeg" alt="My favourite smile" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">My favourite smile 💕</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo2.jpeg" alt="Always glowing" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">Always glowing ✨</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo3.jpeg" alt="This day" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">This day 🥰</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo4.jpeg" alt="Pure magic" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">Pure magic 🌙</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo5.jpeg" alt="You and sunshine" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">You & sunshine ☀️</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo6.jpeg" alt="Forever this" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">Forever this 💫</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+
+        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
+          <div class="polaroid-img">
+            <img src="images/photo7.jpeg" alt="Our special moments" loading="lazy" />
+          </div>
+          <p class="polaroid-caption">Our special moments 🎉</p>
+          <span class="polaroid-heart">💖</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDESHOW -->
+    <section class="slideshow-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ our story ✦</span>
+        <h2 class="section-title">A <em>Beautiful</em> Story</h2>
+      </div>
+
+      <div class="slideshow-wrap">
+        <div class="slideshow-frame">
+          <div class="slide active" id="slide-0">
+            <div>
+              <img src="images/naincy.png" alt="The beginning of us" />
+            </div>
+            <div class="slide-caption-bar">The beginning of us 🌸</div>
+          </div>
+
+          <div class="slide" id="slide-1">
+            <div>
+              <img src="images/photo7.jpeg" alt="Every moment with you" />
+            </div>
+            <div class="slide-caption-bar">Every moment with you ✨</div>
+          </div>
+
+          <div class="slide" id="slide-2">
+            <div>
+              <img src="images/photo6.jpeg" alt="You make me smile" />
+            </div>
+            <div class="slide-caption-bar">You make me smile 💕</div>
+          </div>
+
+          <div class="slide" id="slide-3">
+            <div>
+              <img src="images/photo1.jpeg" alt="Always and forever" />
+            </div>
+            <div class="slide-caption-bar">Always & forever 🌹</div>
+          </div>
+        </div>
+
+        <div class="slideshow-controls">
+          <button class="slide-btn" onclick="prevSlide()" type="button" aria-label="Previous slide">‹</button>
+          <div class="slide-dots" id="slide-dots">
+            <div class="slide-dot active" onclick="goSlide(0)" role="button" tabindex="0" aria-label="Slide 1"></div>
+            <div class="slide-dot" onclick="goSlide(1)" role="button" tabindex="0" aria-label="Slide 2"></div>
+            <div class="slide-dot" onclick="goSlide(2)" role="button" tabindex="0" aria-label="Slide 3"></div>
+            <div class="slide-dot" onclick="goSlide(3)" role="button" tabindex="0" aria-label="Slide 4"></div>
+          </div>
+          <button class="slide-btn" onclick="nextSlide()" type="button" aria-label="Next slide">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOVE NOTES -->
+    <section class="notes-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ from the heart ✦</span>
+        <h2 class="section-title">Things I <em>Love</em> About You</h2>
+      </div>
+
+      <div class="notes-grid">
+        <div class="glass-card note-card">
+          <span class="note-icon">🌸</span>
+          <p class="note-text">"The way your eyes light up when you laugh — it's the most beautiful thing I've ever seen."</p>
+          <span class="note-author">— Always yours</span>
+        </div>
+        <div class="glass-card note-card">
+          <span class="note-icon">✨</span>
+          <p class="note-text">"You don't even try and yet you shine brighter than anyone in the room. Every single time."</p>
+          <span class="note-author">— Always yours</span>
+        </div>
+        <div class="glass-card note-card">
+          <span class="note-icon">💫</span>
+          <p class="note-text">"Your kindness, your warmth, your smile — you are a rare and wonderful kind of person."</p>
+          <span class="note-author">— Always yours</span>
+        </div>
+        <div class="glass-card note-card">
+          <span class="note-icon">🦋</span>
+          <p class="note-text">"With you, even ordinary days feel extraordinary. You make everything feel like magic."</p>
+          <span class="note-author">— Always yours</span>
+        </div>
+        <div class="glass-card note-card">
+          <span class="note-icon">🌙</span>
+          <p class="note-text">"I fall a little more in love with you every day, without even trying."</p>
+          <span class="note-author">— Always yours</span>
+        </div>
+        <div class="glass-card note-card">
+          <span class="note-icon">🌹</span>
+          <p class="note-text">"You are the calm in my chaos, the colour in my grey — my favourite everything."</p>
+          <span class="note-author">— Always yours</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPECIAL MESSAGE -->
+    <section class="message-section reveal">
+      <div class="glass-card message-card">
+        <span class="message-quote-mark">"</span>
+        <p class="message-text">
+          To my <em>special one</em> — I made this little world for you,<br>
+          because no single word, no single moment, no single gift<br>
+          could ever be <em>enough</em> to show you what you mean to me.<br><br>
+          You are my home. You are my peace.<br>
+          You are the most beautiful part of <em>my story</em>. 🌸
+        </p>
+        <div class="message-sign">With all my love 💕</div>
+      </div>
+    </section>
+
+  </div><!-- /page-wrap -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p class="footer-text">Our Little World — made us 💕</p>
+    <p class="footer-hearts">🌸 💫 🌺 💕 ✨</p>
+  </footer>
+
+</div><!-- /main-content -->
+
+<!-- Live Chat Toggle -->
+<div class="chat-toggle-btn" onclick="toggleChat()" role="button" tabindex="0" aria-label="Open live chat">
+  <span id="chat-toggle-icon">💬</span>
+</div>
+
+<div class="chat-box" id="chat-box">
+  <div class="chat-header">
+    <span class="chat-avatar">💕</span>
+    <div>
+      <p class="chat-title">Live Chat with your partner ❤️</p>
+      <p class="chat-status"><span class="status-dot"></span> <span id="online-status">connecting...</span></p>
+    </div>
+    <button class="chat-close" onclick="toggleChat()" type="button" aria-label="Close chat">✕</button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages"></div>
+
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Type a sweet message..." maxlength="500" onkeydown="if(event.key==='Enter') sendMessage()" />
+    <button onclick="sendMessage()" type="button" aria-label="Send">➤</button>
+  </div>
+</div>
+
+<!-- Floating Instagram -->
+<a href="https://www.instagram.com/__ankit._.op_/" target="_blank" class="floating-contact-betu" rel="noopener noreferrer">
+  <i class="fab fa-instagram"></i>
+  <span>Betu ❤️</span>
+</a>
+
+<a href="https://www.instagram.com/naincy__raman_/" target="_blank" class="floating-contact-babe" rel="noopener noreferrer">
+  <i class="fab fa-instagram"></i>
+  <span>Babe 💕</span>
+</a>
+
+<!-- Back to Top -->
+<button class="back-to-top" onclick="scrollToTop()" type="button" aria-label="Back to Top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">
+    <i class="fas fa-times"></i>
+  </button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+</div>
+
+<!-- WhatsApp Share -->
+<!-- <button class="whatsapp-share-btn" onclick="shareOnWhatsApp()" type="button">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.524 5.849L0 24l6.302-1.499C8.016 23.46 9.973 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.896 0-3.662-.523-5.17-1.433l-.37-.221-3.741.891.944-3.639-.244-.388A9.937 9.937 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/>
+  </svg>
+  <span>Share on WhatsApp 💕</span>
+</button> -->
+
+</body>
+</html>
