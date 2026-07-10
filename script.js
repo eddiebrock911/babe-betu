@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // // Auto-unlock if already unlocked this session isse baar baar password nahi dalna padega
 
-  
+
   // if (sessionStorage.getItem("naincykit_unlocked") === "1") {
   //   const screen = document.getElementById("password-screen");
   //   const main = document.getElementById("main-content");
@@ -389,4 +389,4 @@ window.openZoom = openZoom;
 window.openZoomFromPolaroid = openZoomFromPolaroid;
 window.closeZoom = closeZoom;
 window.scrollToTop = scrollToTop;
-window.shareOnWhatsApp = shareOnWhatsApp;
+//window.shareOnWhatsApp = shareOnWhatsApp;
