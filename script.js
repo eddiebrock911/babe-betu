@@ -4,7 +4,7 @@
    ============================================================ */
 
 // ─── CONFIG ───────────────────────────────────────────────
-const CORRECT_PASSWORD = "naincy"; // hint: special me between you
+const CORRECT_PASSWORD = "iloveyou"; // hint: special me between you
 const START_DATE = new Date("2026-05-29T20:17:00");
 
 // ─── PASSWORD ─────────────────────────────────────────────
