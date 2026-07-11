@@ -46,7 +46,7 @@ babe-betu/
 ├── style.css           # All styling — theme colors live in :root CSS variables
 ├── script.js            # Interactions, animations, counter & the music player
 ├── live-chat.js         # Firebase-powered live chat
-├── images1/               # Photos used across the hero, gallery & slideshow
+├── images/               # Photos used across the hero, gallery & slideshow
 ├── package.json           # Firebase dependency
 └── .gitignore
 ```
@@ -78,7 +78,7 @@ This project doubles as a template for "build one of these for someone you love.
 |---|---|
 | The entry password | `CORRECT_PASSWORD` in `script.js` |
 | The "together since" date | `START_DATE` in `script.js` |
-| Photos | Swap files in `images1/` and update the matching `src` paths in `index.html` |
+| Photos | Swap files in `images/` and update the matching `src` paths in `index.html` |
 | The playlist | The `PLAYLIST` array in `script.js` |
 | Colors & theme | The CSS variables at the top of `style.css` (`:root`) |
 | Timeline, notes & the special message | Their sections in `index.html` |
