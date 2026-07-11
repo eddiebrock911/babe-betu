@@ -82,14 +82,14 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <a class="nav-logo" href="#">NaincyKit 💕</a>
+    <a class="nav-logo" href="#">NainKit💕</a>
     <div class="nav-actions">
-      <button class="music-btn" id="music-btn" onclick="toggleMusic()" type="button">
+      <button class="music-btn" id="music-btn" onclick="togglePlayerPanel()" type="button" aria-label="Open music player">
         <span class="music-note" id="music-note">♪</span>
         <span class="music-bars" aria-hidden="true">
           <span></span><span></span><span></span><span></span>
         </span>
-        <span id="music-label">Play Music</span>
+        <span id="music-label">Music</span>
       </button>
       <button class="theme-toggle" onclick="toggleTheme()" type="button" aria-label="Toggle Theme">
         <i class="fas fa-moon"></i>
@@ -97,10 +97,86 @@
     </div>
   </nav>
 
-  <!-- Hidden audio -->
-  <audio id="bg-music" loop preload="none">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-  </audio>
+  <!-- Audio engine -->
+  <audio id="bg-music" preload="metadata"></audio>
+
+  <!-- ===== ROMANTIC MUSIC PLAYER ===== -->
+  <div class="player-panel" id="player-panel" aria-hidden="true">
+    <div class="player-glow"></div>
+
+    <div class="player-top">
+      <div class="player-badge">💕 Our Playlist</div>
+      <button class="player-close" onclick="togglePlayerPanel()" type="button" aria-label="Close player">✕</button>
+    </div>
+
+    <div class="player-now">
+      <div class="player-art" id="player-art">
+        <span class="player-art-icon" id="player-art-icon">💗</span>
+        <div class="player-vinyl" id="player-vinyl"></div>
+      </div>
+      <div class="player-meta">
+        <p class="player-now-label">Now Playing</p>
+        <h3 class="player-title" id="player-title">Soft Hearts</h3>
+        <p class="player-artist" id="player-artist">For Naincy 💕</p>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="player-progress-wrap">
+      <span class="player-time" id="player-current">0:00</span>
+      <div class="player-progress" id="player-progress" role="slider" aria-label="Seek" tabindex="0">
+        <div class="player-progress-track">
+          <div class="player-progress-fill" id="player-progress-fill"></div>
+          <div class="player-progress-thumb" id="player-progress-thumb"></div>
+        </div>
+      </div>
+      <span class="player-time" id="player-duration">0:00</span>
+    </div>
+
+    <!-- Controls -->
+    <div class="player-controls">
+      <button class="pc-btn" onclick="toggleShuffle()" type="button" id="shuffle-btn" title="Shuffle" aria-label="Shuffle">
+        <i class="fas fa-random"></i>
+      </button>
+      <button class="pc-btn" onclick="prevTrack()" type="button" aria-label="Previous">
+        <i class="fas fa-step-backward"></i>
+      </button>
+      <button class="pc-btn pc-play" onclick="toggleMusic()" type="button" id="play-btn" aria-label="Play">
+        <i class="fas fa-play" id="play-icon"></i>
+      </button>
+      <button class="pc-btn" onclick="nextTrack()" type="button" aria-label="Next">
+        <i class="fas fa-step-forward"></i>
+      </button>
+      <button class="pc-btn" onclick="toggleRepeat()" type="button" id="repeat-btn" title="Repeat" aria-label="Repeat">
+        <i class="fas fa-redo"></i>
+      </button>
+    </div>
+
+    <!-- Volume -->
+    <div class="player-volume">
+      <button class="pc-btn pc-vol-icon" onclick="toggleMute()" type="button" id="vol-btn" aria-label="Mute">
+        <i class="fas fa-volume-up" id="vol-icon"></i>
+      </button>
+      <input
+        type="range"
+        class="volume-slider"
+        id="volume-slider"
+        min="0"
+        max="100"
+        value="55"
+        aria-label="Volume"
+      />
+      <span class="vol-pct" id="vol-pct">55%</span>
+    </div>
+
+    <!-- Playlist -->
+    <div class="player-playlist-head">
+      <span>Romantic Playlist</span>
+      <span class="playlist-count" id="playlist-count">6 songs</span>
+    </div>
+    <div class="player-playlist" id="player-playlist"></div>
+  </div>
+  <div class="player-backdrop" id="player-backdrop" onclick="togglePlayerPanel()"></div>
 
   <div class="page-wrap">
 
@@ -217,7 +293,7 @@
             <img src="images/photo2.jpeg" alt="Always glowing" loading="lazy" />
           </div>
           <p class="polaroid-caption">Always glowing ✨</p>
-          <span class="polaroid-heart">😍</span>
+          <span class="polaroid-heart">💕</span>
         </div>
 
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
@@ -225,7 +301,7 @@
             <img src="images/photo3.jpeg" alt="This day" loading="lazy" />
           </div>
           <p class="polaroid-caption">This day 🥰</p>
-          <span class="polaroid-heart">👑</span>
+          <span class="polaroid-heart">💝</span>
         </div>
 
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
@@ -233,7 +309,7 @@
             <img src="images/photo4.jpeg" alt="Pure magic" loading="lazy" />
           </div>
           <p class="polaroid-caption">Pure magic 🌙</p>
-          <span class="polaroid-heart">❤️</span>
+          <span class="polaroid-heart">🫰</span>
         </div>
 
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
@@ -249,7 +325,7 @@
             <img src="images/photo6.jpeg" alt="Forever this" loading="lazy" />
           </div>
           <p class="polaroid-caption">Forever this 💫</p>
-          <span class="polaroid-heart">💗</span>
+          <span class="polaroid-heart">😍</span>
         </div>
 
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
@@ -257,17 +333,8 @@
             <img src="images/photo7.jpeg" alt="Our special moments" loading="lazy" />
           </div>
           <p class="polaroid-caption">Our special moments 🎉</p>
-          <span class="polaroid-heart">💖</span>
+          <span class="polaroid-heart">🥰</span>
         </div>
-
-        <div class="polaroid" onclick="openZoomFromPolaroid(this)">
-          <div class="polaroid-img">
-            <img src="images/photo10.jpeg" alt="Our special moments" loading="lazy" />
-          </div>
-          <p class="polaroid-caption">My Heart 🫰</p>
-          <span class="polaroid-heart">💝</span>
-        </div>
-
       </div>
     </section>
 
@@ -382,7 +449,7 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p class="footer-text">Our Little World — made us 💕</p>
+    <p class="footer-text">Our Little World — made <b>Us</b> 💕</p>
     <p class="footer-hearts">🌸 💫 🌺 💕 ✨</p>
   </footer>
 
