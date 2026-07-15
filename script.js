@@ -669,12 +669,115 @@ function enhanceHero() {
   }
 }
 
+// ─── CUSTOM ANIMATED CURSOR ────────────────────────────────
+const CURSOR_HOVER_SELECTOR =
+  "a, button, input, textarea, select, [role='button'], [role='slider'], [onclick]";
+const CURSOR_SPARKLES = ["💕", "✨", "💫", "🌸"];
+
+function spawnCursorSpark(layer, x, y) {
+  const s = document.createElement("span");
+  s.className = "cursor-spark";
+  s.textContent = CURSOR_SPARKLES[Math.floor(Math.random() * CURSOR_SPARKLES.length)];
+  s.style.left = x + "px";
+  s.style.top = y + "px";
+  s.style.setProperty("--spark-size", 10 + Math.random() * 6 + "px");
+  layer.appendChild(s);
+  setTimeout(() => s.remove(), 900);
+}
+
+function initCustomCursor() {
+  // Only enable on devices with a real mouse — skip touch / coarse pointers
+  const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!fineHover || reduceMotion) return;
+
+  const dot = document.getElementById("cursor-dot");
+  const ring = document.getElementById("cursor-ring");
+  const sparkLayer = document.getElementById("cursor-particles");
+  if (!dot || !ring) return;
+
+  document.body.classList.add("has-custom-cursor");
+
+  let mx = 0, my = 0;
+  let dx = 0, dy = 0, rx = 0, ry = 0;
+  let started = false;
+  let lastSpark = 0;
+
+  function onMove(e) {
+    mx = e.clientX;
+    my = e.clientY;
+    if (!started) {
+      started = true;
+      dx = rx = mx;
+      dy = ry = my;
+      dot.style.opacity = "1";
+      ring.style.opacity = "1";
+    }
+    const now = performance.now();
+    if (sparkLayer && now - lastSpark > 110) {
+      lastSpark = now;
+      spawnCursorSpark(sparkLayer, mx, my);
+    }
+  }
+  function onDown() {
+    ring.classList.add("cursor-click");
+    dot.classList.add("cursor-click");
+  }
+  function onUp() {
+    ring.classList.remove("cursor-click");
+    dot.classList.remove("cursor-click");
+  }
+  function onOver(e) {
+    if (e.target.closest && e.target.closest(CURSOR_HOVER_SELECTOR)) {
+      ring.classList.add("cursor-hover");
+    }
+  }
+  function onOut(e) {
+    if (e.target.closest && e.target.closest(CURSOR_HOVER_SELECTOR)) {
+      ring.classList.remove("cursor-hover");
+    }
+  }
+  // Bail out gracefully if a real touch ever lands (hybrid touch+mouse devices)
+  function onTouch() {
+    document.body.classList.remove("has-custom-cursor");
+    dot.style.opacity = "0";
+    ring.style.opacity = "0";
+    window.removeEventListener("mousemove", onMove);
+    window.removeEventListener("mousedown", onDown);
+    window.removeEventListener("mouseup", onUp);
+    document.removeEventListener("mouseover", onOver);
+    document.removeEventListener("mouseout", onOut);
+  }
+
+  window.addEventListener("mousemove", onMove, { passive: true });
+  window.addEventListener("mousedown", onDown);
+  window.addEventListener("mouseup", onUp);
+  document.addEventListener("mouseover", onOver, { passive: true });
+  document.addEventListener("mouseout", onOut, { passive: true });
+  window.addEventListener("touchstart", onTouch, { passive: true, once: true });
+
+  function loop() {
+    if (started) {
+      // dot tracks almost instantly, ring glides behind with a soft spring lag
+      dx += (mx - dx) * 0.9;
+      dy += (my - dy) * 0.9;
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%, -50%)`;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
 // ─── INIT ─────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   createPwStars();
   initLightbox();
   initParallax();
   enhanceHero();
+  initCustomCursor();
   initMusicPlayer();
   resetSlideTimer();
   window.addEventListener("scroll", onScroll, { passive: true });

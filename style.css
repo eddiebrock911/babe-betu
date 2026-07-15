@@ -102,6 +102,104 @@ a {
 }
 
 /* ============================================================
+   CUSTOM ANIMATED CURSOR
+   ============================================================ */
+.cursor-dot,
+.cursor-ring {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor * {
+    cursor: none !important;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, var(--rose), var(--violet));
+    box-shadow: 0 0 14px 2px var(--rose-glow);
+    transition: opacity 0.25s ease, box-shadow 0.3s ease;
+  }
+
+  .cursor-ring {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(255, 122, 168, 0.55);
+    background: radial-gradient(circle, rgba(155, 92, 255, 0.1), transparent 70%);
+    transition:
+      width 0.35s var(--ease-spring),
+      height 0.35s var(--ease-spring),
+      border-color 0.3s ease,
+      background 0.3s ease,
+      opacity 0.25s ease,
+      box-shadow 0.3s ease;
+  }
+
+  /* Grows + glows over links, buttons, inputs — anything clickable */
+  .cursor-ring.cursor-hover {
+    width: 58px;
+    height: 58px;
+    border-color: var(--rose);
+    background: radial-gradient(circle, rgba(255, 77, 141, 0.16), transparent 70%);
+  }
+
+  /* Little pulse on mousedown */
+  .cursor-dot.cursor-click {
+    box-shadow: 0 0 18px 6px var(--violet-glow);
+  }
+
+  .cursor-ring.cursor-click {
+    border-color: var(--violet);
+    box-shadow: 0 0 22px 4px var(--violet-glow);
+  }
+}
+
+/* Sparkle trail drifting behind the cursor */
+.cursor-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  pointer-events: none;
+}
+
+.cursor-spark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  font-size: var(--spark-size, 12px);
+  opacity: 0.85;
+  transform: translate(-50%, -50%);
+  animation: cursorSparkFade 0.9s ease-out forwards;
+}
+
+@keyframes cursorSparkFade {
+  0% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) translateY(-26px);
+  }
+}
+
+/* ============================================================
    PASSWORD SCREEN
    ============================================================ */
 #password-screen {
