@@ -60,16 +60,6 @@ git clone https://github.com/eddiebrock911/babe-betu.git
 cd babe-betu
 ```
 
-Serve it with any static server rather than opening `index.html` directly — the live chat needs `http://`, not `file://`, to talk to Firebase:
-
-```bash
-npx serve .
-# or
-python3 -m http.server 8000
-```
-
-If you fork this and want live chat working on your own copy, point `live-chat.js` at your own Firebase project's config.
-
 ## 🎨 Making It Your Own
 
 This project doubles as a template for "build one of these for someone you love." A few places to look if you're customizing it:
