@@ -3519,7 +3519,451 @@ body.light .player-progress-track {
   }
 }
 
-/* Reduced motion */
+/* ============================================================
+   🔔 CHAT NOTIFICATION BADGE
+   ============================================================ */
+.chat-notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 99px;
+  background: #ff3b5c;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border: 2px solid var(--bg-deep);
+  box-shadow: 0 2px 8px rgba(255, 59, 92, 0.5);
+  animation: badgePop 0.3s var(--ease-spring);
+  z-index: 2;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================================
+   ✍️ TYPING INDICATOR
+   ============================================================ */
+.chat-typing-indicator {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  transition: max-height 0.3s var(--ease-out), padding 0.3s, opacity 0.3s;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-typing-indicator.visible {
+  max-height: 36px;
+  padding: 6px 18px 8px;
+  opacity: 1;
+}
+
+.typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.typing-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--rose-soft);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ============================================================
+   😀 EMOJI PICKER
+   ============================================================ */
+.chat-emoji-picker {
+  display: none;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+body.light .chat-emoji-picker {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.chat-emoji-picker.open {
+  display: flex;
+}
+
+.chat-emoji-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.chat-emoji-btn:hover {
+  background: rgba(255, 77, 141, 0.15);
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   😊 CHAT EXTRA BUTTONS (emoji toggle, sound toggle)
+   ============================================================ */
+.chat-extra-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-extra-btn:hover {
+  background: rgba(255, 77, 141, 0.2);
+  transform: scale(1.08);
+}
+
+.chat-extra-btn.active {
+  background: rgba(255, 77, 141, 0.25);
+  box-shadow: 0 0 12px rgba(255, 77, 141, 0.2);
+}
+
+.chat-header-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chat-header-btn:hover {
+  background: rgba(255, 77, 141, 0.3);
+}
+
+/* ============================================================
+   💬 QUICK ROMANTIC REPLIES
+   ============================================================ */
+.chat-quick-replies {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px;
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.15);
+  scrollbar-width: none;
+}
+
+.chat-quick-replies::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-quick-btn {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid rgba(255, 77, 141, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 77, 141, 0.08);
+  color: var(--rose-soft);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s var(--ease-out);
+}
+
+.chat-quick-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 77, 141, 0.25), rgba(155, 92, 255, 0.25));
+  border-color: rgba(255, 77, 141, 0.45);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   📱 MESSAGE ENHANCEMENTS
+   ============================================================ */
+
+/* Message text wrapper */
+.msg-text {
+  line-height: 1.5;
+}
+
+/* Bottom row: time + read status */
+.msg-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.msg-bottom .msg-time {
+  margin-top: 0;
+}
+
+/* Read receipts */
+.msg-status {
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.msg-delivered {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.msg-seen {
+  color: #60a5fa;
+  font-weight: 700;
+}
+
+.msg.them .msg-delivered,
+.msg.them .msg-seen {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================
+   🖱️ MESSAGE ACTIONS (hover)
+   ============================================================ */
+.msg-actions {
+  position: absolute;
+  top: 4px;
+  right: -4px;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+
+.msg.me .msg-actions {
+  right: auto;
+  left: -4px;
+}
+
+.msg:hover .msg-actions {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.msg-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.msg-action-btn:hover {
+  background: rgba(255, 77, 141, 0.35);
+  transform: scale(1.12);
+}
+
+.msg-action-delete:hover {
+  background: rgba(255, 59, 92, 0.35);
+}
+
+/* ============================================================
+   ❤️ MESSAGE REACTIONS
+   ============================================================ */
+.msg-reactions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.msg-reaction-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.msg.me .msg-reaction-badge {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Reaction picker (floating) */
+.chat-reaction-picker {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  background: rgba(18, 8, 31, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  animation: reactionPop 0.25s var(--ease-spring);
+}
+
+body.light .chat-reaction-picker {
+  background: rgba(255, 245, 248, 0.96);
+  border-color: rgba(255, 120, 160, 0.2);
+}
+
+@keyframes reactionPop {
+  0% { opacity: 0; transform: scale(0.8) translateY(4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.chat-reaction-picker button {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.chat-reaction-picker button:hover {
+  background: rgba(255, 77, 141, 0.2);
+  transform: scale(1.25);
+}
+
+/* ============================================================
+   💕 LOVE RAIN (chat hearts burst)
+   ============================================================ */
+.chat-love-rain-heart {
+  position: absolute;
+  bottom: 0;
+  font-size: var(--lr-size, 16px);
+  pointer-events: none;
+  z-index: 50;
+  animation: chatLoveRain var(--lr-dur, 2s) ease-out var(--lr-delay, 0s) forwards;
+  opacity: 0;
+}
+
+@keyframes chatLoveRain {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.5) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-250px) translateX(var(--lr-drift, 0px)) scale(1.2) rotate(var(--lr-rot, 20deg));
+  }
+}
+
+/* ============================================================
+   💌 CHAT EMPTY STATE
+   ============================================================ */
+.chat-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.chat-empty-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: motivationFloat 3s ease-in-out infinite;
+}
+
+.chat-empty-state p {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+body.light .chat-empty-state p {
+  color: rgba(42, 18, 32, 0.4);
+}
+
+/* ============================================================
+   SCROLLBAR FOR CHAT
+   ============================================================ */
+.chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 77, 141, 0.25);
+  border-radius: 99px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 77, 141, 0.4);
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
