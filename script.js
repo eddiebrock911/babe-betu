@@ -67,6 +67,8 @@ function unlockWorld() {
   initHearts();
   startCounter();
   observeReveals();
+  initLoveLetter();
+  showNewQuote();
 }
 
 function spawnConfetti() {
@@ -112,7 +114,6 @@ function startCounter() {
   function tick() {
     const now = new Date();
     let diff = now - START_DATE;
-    // If start is in the future, show countdown-style absolute (still beautiful)
     const future = diff < 0;
     diff = Math.abs(diff);
 
@@ -131,7 +132,6 @@ function startCounter() {
     if (m) m.textContent = String(mins).padStart(2, "0");
     if (s) s.textContent = String(secs).padStart(2, "0");
 
-    // subtle pulse on seconds change
     if (s) {
       s.style.transform = "scale(1.08)";
       setTimeout(() => (s.style.transform = "scale(1)"), 150);
@@ -210,8 +210,457 @@ function closeZoom() {
   document.body.style.overflow = "";
 }
 
-// ─── ROMANTIC MUSIC PLAYER ────────────────────────────────
-// Royalty-free romantic / soft tracks (Internet Archive + SoundHelix)
+// ═══════════════════════════════════════════════════════════
+// 🤗 VIRTUAL HUG FEATURE
+// ═══════════════════════════════════════════════════════════
+const HUG_MESSAGES = [
+  { emoji: "🤗💕", title: "A warm hug just for you!", text: "Close your eyes and feel my arms around you. You are so loved, Naincy. I'm always here for you, no matter what. 💕" },
+  { emoji: "🌸✨", title: "You're doing amazing!", text: "Even on tough days, remember — you're the strongest, bravest, most beautiful person I know. This hug is my way of saying I'm proud of you. 💪" },
+  { emoji: "💗🦋", title: "My love wraps around you", text: "No distance is too far, no moment too dark — my love finds its way to you, always. Feel it now, like sunshine on your face. ☀️" },
+  { emoji: "🌙💫", title: "You are never alone", text: "Even when the world feels heavy, remember you have someone who believes in you unconditionally. I'm your safe place, always. 🤗" },
+  { emoji: "🌹💕", title: "Sending all my warmth", text: "Imagine me holding you tight, whispering that everything will be okay — because it will. We'll get through everything together. 💕" },
+  { emoji: "⚖️💪", title: "Future Lawyer needs a hug too!", text: "Even superheroes need a break. Take a deep breath, my love. You're working so hard and it WILL pay off. I believe in you! ⚖️✨" },
+  { emoji: "🫂🌺", title: "A hug full of butterflies", text: "Every time I think of you, my heart does a little dance. This hug carries all those butterflies straight to you. 🦋💕" },
+  { emoji: "☀️💛", title: "You're my sunshine!", text: "On cloudy days, remember — you are someone's sunshine. You are MY sunshine. And I'll always be yours. ☀️💕" }
+];
+
+let hugCount = parseInt(localStorage.getItem("naincykit_hugs") || "0");
+
+function sendVirtualHug() {
+  hugCount++;
+  localStorage.setItem("naincykit_hugs", String(hugCount));
+  const countEl = document.getElementById("hug-count");
+  if (countEl) countEl.textContent = hugCount;
+
+  // Pick random message
+  const msg = HUG_MESSAGES[Math.floor(Math.random() * HUG_MESSAGES.length)];
+  const titleEl = document.getElementById("hug-title");
+  const textEl = document.getElementById("hug-text");
+  const emojiEl = document.querySelector(".hug-emoji");
+  if (titleEl) titleEl.textContent = msg.title;
+  if (textEl) textEl.textContent = msg.text;
+  if (emojiEl) emojiEl.textContent = msg.emoji;
+
+  // Show overlay
+  const overlay = document.getElementById("hug-overlay");
+  if (overlay) {
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    spawnHugHearts();
+  }
+}
+
+function spawnHugHearts() {
+  const container = document.getElementById("hug-hearts-burst");
+  if (!container) return;
+  container.innerHTML = "";
+  const hearts = ["💕", "💗", "💖", "💝", "🤗", "🌸", "✨", "💫", "🦋", "❤️", "🌹", "💘"];
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+
+  for (let i = 0; i < 30; i++) {
+    const h = document.createElement("span");
+    h.className = "hug-burst-heart";
+    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    const angle = (Math.PI * 2 * i) / 30 + Math.random() * 0.5;
+    const dist = 100 + Math.random() * 250;
+    h.style.left = centerX + "px";
+    h.style.top = centerY + "px";
+    h.style.setProperty("--hx", Math.cos(angle) * dist + "px");
+    h.style.setProperty("--hy", Math.sin(angle) * dist + "px");
+    h.style.setProperty("--hr", -30 + Math.random() * 60 + "deg");
+    h.style.setProperty("--hs", 18 + Math.random() * 24 + "px");
+    h.style.setProperty("--hd", 1.5 + Math.random() * 1.5 + "s");
+    h.style.animationDelay = Math.random() * 0.4 + "s";
+    container.appendChild(h);
+  }
+}
+
+function closeHug() {
+  const overlay = document.getElementById("hug-overlay");
+  if (overlay) {
+    overlay.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 💌 REASONS I LOVE YOU — RANDOM GENERATOR
+// ═══════════════════════════════════════════════════════════
+const LOVE_REASONS = [
+  { emoji: "😍", text: "Your smile — it lights up my entire world and makes every bad day disappear." },
+  { emoji: "🧠", text: "Your brilliant mind — the way you think, analyze, and dream about becoming a lawyer inspires me daily." },
+  { emoji: "💪", text: "Your determination — you never give up, no matter how tough things get. That's my future lawyer!" },
+  { emoji: "🌸", text: "Your kindness — the way you care about everyone around you shows what a beautiful heart you have." },
+  { emoji: "😂", text: "Your laughter — it's the most beautiful sound in the universe and I'd do anything to hear it." },
+  { emoji: "🌙", text: "Your late-night conversations — those moments when the world sleeps but we're still talking about everything." },
+  { emoji: "🦋", text: "The butterflies you give me — even after all this time, you still make my heart race." },
+  { emoji: "📚", text: "Your dedication to studies — watching you work so hard for your dream makes me fall for you even more." },
+  { emoji: "💕", text: "The way you say my name — nobody else makes it sound as special as you do." },
+  { emoji: "🌟", text: "Your ambition — you dream big and work harder. That combination is irresistible." },
+  { emoji: "🤗", text: "Your hugs — they feel like coming home. Safe, warm, and perfect." },
+  { emoji: "🎵", text: "The songs that remind me of you — every love song suddenly makes sense because of you." },
+  { emoji: "✨", text: "Your eyes — they hold entire galaxies and I could get lost in them forever." },
+  { emoji: "🌹", text: "Your strength during tough times — you handle everything with such grace and courage." },
+  { emoji: "☕", text: "Our chai dates — even the simplest moments feel magical when I'm with you." },
+  { emoji: "🫶", text: "The way you support me — you believe in me even when I don't believe in myself." },
+  { emoji: "🌈", text: "Your positivity — you find beauty and hope even in the darkest moments." },
+  { emoji: "📖", text: "Your love for learning — you're going to be the most knowledgeable lawyer in the courtroom!" },
+  { emoji: "💫", text: "How you make ordinary days extraordinary — with you, every day feels like an adventure." },
+  { emoji: "🎀", text: "Your cute little habits — the things you don't even notice about yourself that I adore." },
+  { emoji: "🌺", text: "Your voice — whether you're happy, sad, or arguing a mock case, I love every word." },
+  { emoji: "🔥", text: "Your passion — when you talk about your dreams, your eyes sparkle like stars." },
+  { emoji: "💝", text: "How you remember the little things — it shows how deeply you care." },
+  { emoji: "🌻", text: "Your warmth — being near you feels like sunshine on a winter morning." },
+  { emoji: "⚖️", text: "Your sense of justice — you'll fight for what's right, and that makes me so proud." },
+  { emoji: "🥰", text: "The way you look at me — like I'm the only person in the world." },
+  { emoji: "🎭", text: "Your expressions — every little face you make tells a story I love reading." },
+  { emoji: "💐", text: "How you make me want to be better — you bring out the best version of me." },
+  { emoji: "🌊", text: "Your calm presence — you're my peace in this chaotic world." },
+  { emoji: "🏠", text: "You feel like home — wherever you are, that's where I belong." }
+];
+
+let reasonsSeen = parseInt(localStorage.getItem("naincykit_reasons_seen") || "0");
+let lastReasonIndex = -1;
+
+function showRandomReason() {
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * LOVE_REASONS.length);
+  } while (idx === lastReasonIndex && LOVE_REASONS.length > 1);
+  lastReasonIndex = idx;
+
+  const reason = LOVE_REASONS[idx];
+  const display = document.getElementById("reasons-display");
+  const emojiEl = document.getElementById("reasons-emoji");
+  const textEl = document.getElementById("reasons-text");
+  const seenEl = document.getElementById("reasons-seen");
+
+  if (display) display.classList.add("active");
+  if (emojiEl) {
+    emojiEl.style.animation = "none";
+    void emojiEl.offsetWidth;
+    emojiEl.textContent = reason.emoji;
+    emojiEl.style.animation = "reasonPop 0.6s var(--ease-spring)";
+  }
+  if (textEl) {
+    textEl.style.opacity = "0";
+    setTimeout(() => {
+      textEl.textContent = reason.text;
+      textEl.style.opacity = "1";
+    }, 200);
+  }
+
+  reasonsSeen++;
+  localStorage.setItem("naincykit_reasons_seen", String(reasonsSeen));
+  if (seenEl) seenEl.textContent = reasonsSeen;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 💪 DAILY MOTIVATION QUOTES
+// ═══════════════════════════════════════════════════════════
+const QUOTES = [
+  { quote: "The only way to do great work is to love what you do.", author: "Steve Jobs", icon: "💫", note: "Naincy, your passion for law will take you places you can't even imagine yet! 💪⚖️" },
+  { quote: "Justice cannot be for one side alone, but must be for both.", author: "Eleanor Roosevelt", icon: "⚖️", note: "This is exactly the kind of lawyer you'll be — fair, balanced, and extraordinary! 🌟" },
+  { quote: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt", icon: "🌸", note: "Your dream of becoming a lawyer IS beautiful, and I believe in it with all my heart! 💕" },
+  { quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill", icon: "💪", note: "Every tough exam, every hard day — you keep going. That's true strength, my love! 🔥" },
+  { quote: "The only impossible journey is the one you never begin.", author: "Tony Robbins", icon: "🚀", note: "You've already begun your journey, Naincy. And I'll walk every step with you! 🤝💕" },
+  { quote: "Injustice anywhere is a threat to justice everywhere.", author: "Martin Luther King Jr.", icon: "🏛️", note: "Future Advocate Naincy will fight against injustice — and win! ⚖️✨" },
+  { quote: "Believe you can and you're halfway there.", author: "Theodore Roosevelt", icon: "🌟", note: "I believe in you Naincy. And I know YOU believe in yourself too. That's unstoppable! 💪" },
+  { quote: "The pen is mightier than the sword.", author: "Edward Bulwer-Lytton", icon: "📝", note: "And your pen, dear future lawyer, will change the world! Keep writing your story! 🌍" },
+  { quote: "She believed she could, so she did.", author: "R.S. Grey", icon: "👑", note: "That's you, Naincy. Believe, fight, achieve. Your crown is waiting! 👑⚖️" },
+  { quote: "Hard work beats talent when talent doesn't work hard.", author: "Tim Notke", icon: "🔨", note: "And baby, nobody works harder than you. Your success is inevitable! 💯" },
+  { quote: "The law is reason, free from passion.", author: "Aristotle", icon: "🧠", note: "But you'll bring both reason AND passion to the law — that's what'll make you special! 💕⚖️" },
+  { quote: "Dream big. Start small. Act now.", author: "Robin Sharma", icon: "🎯", note: "You're doing exactly this right now, Naincy. Every study session counts! 📚✨" },
+  { quote: "You are braver than you believe, stronger than you seem, and smarter than you think.", author: "A.A. Milne", icon: "🦁", note: "Read this again whenever you doubt yourself, my love. It's all true! 💕" },
+  { quote: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb", icon: "🌱", note: "You're planting the seeds of your future right now. Keep growing, my love! 🌳" },
+  { quote: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin", icon: "📖", note: "Every page you read, every concept you learn — it's all building your empire! 🏰" }
+];
+
+let lastQuoteIndex = -1;
+
+function showNewQuote() {
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * QUOTES.length);
+  } while (idx === lastQuoteIndex && QUOTES.length > 1);
+  lastQuoteIndex = idx;
+
+  const q = QUOTES[idx];
+  const quoteEl = document.getElementById("motivation-quote");
+  const authorEl = document.getElementById("motivation-author");
+  const iconEl = document.getElementById("motivation-icon");
+  const noteEl = document.getElementById("motivation-note");
+
+  if (quoteEl) {
+    quoteEl.style.opacity = "0";
+    setTimeout(() => {
+      quoteEl.textContent = `"${q.quote}"`;
+      quoteEl.style.opacity = "1";
+    }, 250);
+  }
+  if (authorEl) authorEl.textContent = `— ${q.author}`;
+  if (iconEl) iconEl.textContent = q.icon;
+  if (noteEl) noteEl.innerHTML = `<em>${q.note}</em>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 📚 STUDY TIMER (POMODORO)
+// ═══════════════════════════════════════════════════════════
+let studyDuration = 25 * 60; // seconds
+let studyRemaining = 25 * 60;
+let studyInterval = null;
+let studyRunning = false;
+let studySessions = parseInt(localStorage.getItem("naincykit_study_sessions_" + new Date().toDateString()) || "0");
+
+const STUDY_MESSAGES = {
+  start: [
+    "Let's go, my love! Focus time begins! You've got this! ⚖️💕",
+    "Future Lawyer study mode: ON! I'm so proud of you! 📚✨",
+    "Time to make your dreams come true, one page at a time! 💪🌟",
+    "Ankit believes in you! Now believe in yourself too! 💕🔥"
+  ],
+  halfway: [
+    "Halfway there, superstar! Keep going! 🌟💕",
+    "You're doing amazing, Naincy! More than halfway! 💪",
+    "Look at you go! Future Lawyer in the making! ⚖️✨",
+  ],
+  fiveMin: [
+    "Just 5 more minutes! You're almost done! 🏆",
+    "So close, my love! Finish strong! 💕💪",
+  ],
+  done: [
+    "🎉 AMAZING! You completed a study session! I'm SO proud of you! 🏆💕",
+    "🎊 SESSION COMPLETE! You're one step closer to your dream, my love! ⚖️✨",
+    "🌟 WOW! Look at you go, Future Lawyer! Take a break, you deserve it! ☕💕",
+  ],
+  idle: [
+    "Ready to study, my love? You've got this! ⚖️💕",
+    "Whenever you're ready, I'm here cheering for you! 📚💪",
+  ]
+};
+
+function getStudyMsg(category) {
+  const msgs = STUDY_MESSAGES[category];
+  return msgs[Math.floor(Math.random() * msgs.length)];
+}
+
+function updateStudyDisplay() {
+  const timeEl = document.getElementById("study-timer-time");
+  const labelEl = document.getElementById("study-timer-label");
+  const countEl = document.getElementById("study-sessions-count");
+
+  if (timeEl) {
+    const mins = Math.floor(studyRemaining / 60);
+    const secs = studyRemaining % 60;
+    timeEl.textContent = String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+  }
+  if (countEl) countEl.textContent = studySessions;
+}
+
+function setStudyTime(minutes) {
+  if (studyRunning) return;
+  studyDuration = minutes * 60;
+  studyRemaining = minutes * 60;
+  updateStudyDisplay();
+
+  // Update active preset
+  document.querySelectorAll(".study-preset").forEach(btn => {
+    btn.classList.toggle("active", parseInt(btn.dataset.time) === minutes);
+  });
+
+  const ring = document.getElementById("study-timer-ring");
+  if (ring) {
+    ring.classList.remove("running", "done");
+  }
+}
+
+function startStudyTimer() {
+  if (studyRunning) return;
+  if (studyRemaining <= 0) {
+    studyRemaining = studyDuration;
+  }
+  studyRunning = true;
+
+  const ring = document.getElementById("study-timer-ring");
+  const startBtn = document.getElementById("study-start-btn");
+  const pauseBtn = document.getElementById("study-pause-btn");
+  const msgText = document.getElementById("study-msg-text");
+  const msgIcon = document.querySelector(".study-msg-icon");
+  const msgBox = document.getElementById("study-message");
+
+  if (ring) ring.classList.add("running");
+  if (ring) ring.classList.remove("done");
+  if (startBtn) startBtn.style.display = "none";
+  if (pauseBtn) pauseBtn.style.display = "inline-flex";
+  if (msgText) msgText.textContent = getStudyMsg("start");
+  if (msgIcon) msgIcon.textContent = "📖";
+  if (msgBox) msgBox.classList.remove("complete");
+
+  const totalDuration = studyDuration;
+  studyInterval = setInterval(() => {
+    studyRemaining--;
+    updateStudyDisplay();
+
+    // Halfway message
+    if (studyRemaining === Math.floor(totalDuration / 2)) {
+      const mt = document.getElementById("study-msg-text");
+      const mi = document.querySelector(".study-msg-icon");
+      if (mt) mt.textContent = getStudyMsg("halfway");
+      if (mi) mi.textContent = "🌟";
+    }
+
+    // 5 min warning
+    if (studyRemaining === 300 && totalDuration > 300) {
+      const mt = document.getElementById("study-msg-text");
+      const mi = document.querySelector(".study-msg-icon");
+      if (mt) mt.textContent = getStudyMsg("fiveMin");
+      if (mi) mi.textContent = "⏰";
+    }
+
+    // Done
+    if (studyRemaining <= 0) {
+      clearInterval(studyInterval);
+      studyInterval = null;
+      studyRunning = false;
+      studySessions++;
+      localStorage.setItem("naincykit_study_sessions_" + new Date().toDateString(), String(studySessions));
+
+      if (ring) ring.classList.remove("running");
+      if (ring) ring.classList.add("done");
+      if (startBtn) startBtn.style.display = "inline-flex";
+      if (pauseBtn) pauseBtn.style.display = "none";
+      if (msgText) msgText.textContent = getStudyMsg("done");
+      if (msgIcon) msgIcon.textContent = "🎉";
+      if (msgBox) msgBox.classList.add("complete");
+
+      updateStudyDisplay();
+
+      // Celebration confetti
+      spawnConfetti();
+    }
+  }, 1000);
+}
+
+function pauseStudyTimer() {
+  if (!studyRunning) return;
+  clearInterval(studyInterval);
+  studyInterval = null;
+  studyRunning = false;
+
+  const ring = document.getElementById("study-timer-ring");
+  const startBtn = document.getElementById("study-start-btn");
+  const pauseBtn = document.getElementById("study-pause-btn");
+  const msgText = document.getElementById("study-msg-text");
+  const msgIcon = document.querySelector(".study-msg-icon");
+
+  if (ring) ring.classList.remove("running");
+  if (startBtn) startBtn.style.display = "inline-flex";
+  if (pauseBtn) pauseBtn.style.display = "none";
+  if (msgText) msgText.textContent = "Paused! Take a breather, you're doing great! ☕💕";
+  if (msgIcon) msgIcon.textContent = "⏸️";
+}
+
+function resetStudyTimer() {
+  clearInterval(studyInterval);
+  studyInterval = null;
+  studyRunning = false;
+  studyRemaining = studyDuration;
+
+  const ring = document.getElementById("study-timer-ring");
+  const startBtn = document.getElementById("study-start-btn");
+  const pauseBtn = document.getElementById("study-pause-btn");
+  const msgText = document.getElementById("study-msg-text");
+  const msgIcon = document.querySelector(".study-msg-icon");
+  const msgBox = document.getElementById("study-message");
+
+  if (ring) ring.classList.remove("running", "done");
+  if (startBtn) startBtn.style.display = "inline-flex";
+  if (pauseBtn) pauseBtn.style.display = "none";
+  if (msgText) msgText.textContent = getStudyMsg("idle");
+  if (msgIcon) msgIcon.textContent = "📖";
+  if (msgBox) msgBox.classList.remove("complete");
+
+  updateStudyDisplay();
+}
+
+// ═══════════════════════════════════════════════════════════
+// 📝 LOVE LETTER — TYPEWRITER EFFECT
+// ═══════════════════════════════════════════════════════════
+const LOVE_LETTER_TEXT = `I don't even know where to begin, because no words feel big enough for what you mean to me.
+
+From the moment you came into my life, everything changed — the colours got brighter, the music got sweeter, and my heart found a reason to beat a little faster every single day.
+
+Naincy, you are not just my love — you are my best friend, my biggest inspiration, and my greatest blessing. Watching you chase your dream of becoming a lawyer fills me with so much pride that sometimes I can't even express it.
+
+You study so hard, you fight so bravely, and you shine so bright — even on days when you don't feel like it. I want you to know that I see all of it, and I admire every single bit of it.
+
+I promise to always be your safe place, your biggest fan, and your forever home. Through every exam, every late night, every victory and every setback — I'll be right here, holding your hand and cheering the loudest.
+
+You are going to change the world, my love. And I'll be the luckiest person alive, watching it happen from the front row. 💕
+
+I love you — more than words, more than stars, more than forever.`;
+
+let letterTyping = false;
+let letterTimeout = null;
+
+function initLoveLetter() {
+  // Only start when letter section is visible
+  const letterSection = document.querySelector(".letter-section");
+  if (!letterSection) return;
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          typeLetter();
+          io.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+  io.observe(letterSection);
+}
+
+function typeLetter() {
+  if (letterTyping) return;
+  letterTyping = true;
+
+  const typedEl = document.getElementById("letter-typed");
+  const cursorEl = document.getElementById("letter-cursor");
+  if (!typedEl) return;
+
+  typedEl.textContent = "";
+  if (cursorEl) cursorEl.style.display = "inline-block";
+
+  let i = 0;
+  function typeNext() {
+    if (i < LOVE_LETTER_TEXT.length) {
+      typedEl.textContent += LOVE_LETTER_TEXT[i];
+      i++;
+      const delay = LOVE_LETTER_TEXT[i - 1] === "\n" ? 120 : 
+                    LOVE_LETTER_TEXT[i - 1] === "." ? 80 :
+                    LOVE_LETTER_TEXT[i - 1] === "," ? 50 : 
+                    22 + Math.random() * 18;
+      letterTimeout = setTimeout(typeNext, delay);
+    } else {
+      letterTyping = false;
+      // Cursor keeps blinking at end
+    }
+  }
+  typeNext();
+}
+
+function replayLetter() {
+  if (letterTimeout) clearTimeout(letterTimeout);
+  letterTyping = false;
+  typeLetter();
+}
+
+// ═══════════════════════════════════════════════════════════
+// ROMANTIC MUSIC PLAYER
+// ═══════════════════════════════════════════════════════════
 const PLAYLIST = [
   {
     title: "Soft Hearts",
@@ -254,7 +703,7 @@ const PLAYLIST = [
 let musicPlaying = false;
 let currentTrack = 0;
 let isShuffle = false;
-let isRepeat = false; // false | 'one' | 'all'
+let isRepeat = false;
 let lastVolume = 0.55;
 let seeking = false;
 
@@ -392,7 +841,6 @@ function nextTrack() {
 
 function prevTrack() {
   const audio = getAudio();
-  // If past 3s, restart current song
   if (audio && audio.currentTime > 3) {
     audio.currentTime = 0;
     return;
@@ -411,7 +859,6 @@ function toggleShuffle() {
 }
 
 function toggleRepeat() {
-  // cycle: off → all → one → off
   if (!isRepeat) isRepeat = "all";
   else if (isRepeat === "all") isRepeat = "one";
   else isRepeat = false;
@@ -421,12 +868,6 @@ function toggleRepeat() {
     btn.classList.toggle("active", !!isRepeat);
     btn.title =
       isRepeat === "one" ? "Repeat one" : isRepeat === "all" ? "Repeat all" : "Repeat off";
-    const icon = btn.querySelector("i");
-    if (icon) {
-      icon.className = isRepeat === "one" ? "fas fa-redo" : "fas fa-redo";
-      icon.style.opacity = isRepeat ? "1" : "";
-    }
-    // small badge feel via data attr
     btn.dataset.mode = isRepeat || "off";
   }
 }
@@ -482,7 +923,6 @@ function initMusicPlayer() {
   const audio = getAudio();
   if (!audio) return;
 
-  // Volume
   const savedVol = parseFloat(localStorage.getItem("naincykit_vol"));
   audio.volume = isFinite(savedVol) ? savedVol : 0.55;
   lastVolume = audio.volume || 0.55;
@@ -499,7 +939,6 @@ function initMusicPlayer() {
     });
   }
 
-  // Progress events
   audio.addEventListener("timeupdate", () => {
     if (!seeking) updateProgress(audio.currentTime, audio.duration || 0);
   });
@@ -521,11 +960,9 @@ function initMusicPlayer() {
   });
   audio.addEventListener("play", () => setPlayingState(true));
   audio.addEventListener("pause", () => {
-    // only mark paused if not switching tracks mid-load
     if (!audio.seeking) setPlayingState(false);
   });
 
-  // Seek bar
   const bar = document.getElementById("player-progress");
   if (bar) {
     const onDown = (e) => {
@@ -548,7 +985,6 @@ function initMusicPlayer() {
     window.addEventListener("touchend", onUp);
   }
 
-  // Load first track metadata (no autoplay — browser policy)
   loadTrack(0, false);
   renderPlaylist();
 }
@@ -577,14 +1013,6 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// ─── WHATSAPP SHARE ───────────────────────────────────────
-function shareOnWhatsApp() {
-  const text = encodeURIComponent(
-    "💕 Look at this beautiful little world made for Naincy by Ankit 🌸\nhttps://naincykit.onrender.com"
-  );
-  window.open(`https://wa.me/?text=${text}`, "_blank", "noopener");
-}
-
 // ─── LIGHTBOX (legacy support) ────────────────────────────
 function initLightbox() {
   const lb = document.getElementById("lightbox");
@@ -611,6 +1039,7 @@ function initLightbox() {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeZoom();
+    closeHug();
     const chat = document.getElementById("chat-box");
     if (chat && chat.classList.contains("open")) {
       chat.classList.remove("open");
@@ -620,7 +1049,6 @@ document.addEventListener("keydown", (e) => {
       togglePlayerPanel();
     }
   }
-  // Don't hijack arrows when typing
   const tag = (e.target && e.target.tagName) || "";
   if (tag === "INPUT" || tag === "TEXTAREA") return;
   if (e.key === "ArrowRight") nextSlide();
@@ -661,7 +1089,6 @@ function initParallax() {
 function enhanceHero() {
   const title = document.querySelector(".hero-title");
   if (!title) return;
-  // soft shimmer on em
   const em = title.querySelector("em");
   if (em) {
     em.style.backgroundSize = "200% auto";
@@ -686,7 +1113,6 @@ function spawnCursorSpark(layer, x, y) {
 }
 
 function initCustomCursor() {
-  // Only enable on devices with a real mouse — skip touch / coarse pointers
   const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!fineHover || reduceMotion) return;
@@ -737,7 +1163,6 @@ function initCustomCursor() {
       ring.classList.remove("cursor-hover");
     }
   }
-  // Bail out gracefully if a real touch ever lands (hybrid touch+mouse devices)
   function onTouch() {
     document.body.classList.remove("has-custom-cursor");
     dot.style.opacity = "0";
@@ -758,7 +1183,6 @@ function initCustomCursor() {
 
   function loop() {
     if (started) {
-      // dot tracks almost instantly, ring glides behind with a soft spring lag
       dx += (mx - dx) * 0.9;
       dy += (my - dy) * 0.9;
       rx += (mx - rx) * 0.16;
@@ -782,6 +1206,19 @@ document.addEventListener("DOMContentLoaded", () => {
   resetSlideTimer();
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  // Restore hug count
+  const hugCountEl = document.getElementById("hug-count");
+  if (hugCountEl) hugCountEl.textContent = hugCount;
+
+  // Restore reasons seen
+  const reasonsSeenEl = document.getElementById("reasons-seen");
+  if (reasonsSeenEl) reasonsSeenEl.textContent = reasonsSeen;
+
+  // Init study timer display
+  updateStudyDisplay();
+  const studySessionsEl = document.getElementById("study-sessions-count");
+  if (studySessionsEl) studySessionsEl.textContent = studySessions;
 
   // Theme restore
   if (localStorage.getItem("naincykit_theme") === "light") {
@@ -816,4 +1253,12 @@ window.openZoom = openZoom;
 window.openZoomFromPolaroid = openZoomFromPolaroid;
 window.closeZoom = closeZoom;
 window.scrollToTop = scrollToTop;
-window.shareOnWhatsApp = shareOnWhatsApp;
+window.sendVirtualHug = sendVirtualHug;
+window.closeHug = closeHug;
+window.showRandomReason = showRandomReason;
+window.showNewQuote = showNewQuote;
+window.setStudyTime = setStudyTime;
+window.startStudyTimer = startStudyTimer;
+window.pauseStudyTimer = pauseStudyTimer;
+window.resetStudyTimer = resetStudyTimer;
+window.replayLetter = replayLetter;

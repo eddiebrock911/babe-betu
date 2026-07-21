@@ -71,6 +71,17 @@
   <img src="" id="zoom-img" alt="Zoomed photo" />
 </div>
 
+<!-- ===== VIRTUAL HUG OVERLAY ===== -->
+<div class="hug-overlay" id="hug-overlay">
+  <div class="hug-hearts-burst" id="hug-hearts-burst"></div>
+  <div class="hug-message-card">
+    <span class="hug-emoji">🤗💕</span>
+    <h2 class="hug-title" id="hug-title">Sending you a warm hug!</h2>
+    <p class="hug-text" id="hug-text">You are loved, you are cherished, and you are never alone. I'm always here for you, my beautiful Naincy. 💕</p>
+    <button class="hug-close-btn" onclick="closeHug()">Thank you, my love 💕</button>
+  </div>
+</div>
+
 <!-- ===== MAIN CONTENT ===== -->
 <div id="main-content">
 
@@ -242,37 +253,47 @@
       </div>
     </section>
 
-    <!-- LOVE TIMELINE -->
-    <section class="timeline-section reveal">
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 🤗 VIRTUAL HUG BUTTON -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="hug-section reveal">
       <div class="section-label">
-        <span class="section-eyebrow">✦ chapters ✦</span>
-        <h2 class="section-title">Our <em>Love</em> Timeline</h2>
+        <span class="section-eyebrow">✦ when you need me ✦</span>
+        <h2 class="section-title">Send Yourself a <em>Warm Hug</em></h2>
       </div>
 
-      <div class="timeline">
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">The Beginning</div>
-          <h3 class="timeline-title">When Our Eyes Met ✨</h3>
-          <p class="timeline-text">A moment that felt ordinary — until it rewrote everything.</p>
+      <div class="glass-card hug-card">
+        <p class="hug-card-desc">Whenever you feel low, lonely, or just need a hug — press this button and feel my love wrapping around you 🤗💕</p>
+        <button class="hug-btn" onclick="sendVirtualHug()" type="button">
+          <span class="hug-btn-icon">🤗</span>
+          <span class="hug-btn-text">Send Me a Hug 💕</span>
+        </button>
+        <div class="hug-counter-wrap">
+          <span class="hug-counter-label">Hugs sent with love:</span>
+          <span class="hug-counter-num" id="hug-count">0</span>
         </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">May 29, 2026</div>
-          <h3 class="timeline-title">We Became Us 💕</h3>
-          <p class="timeline-text">8:17 PM — the second my world found its favorite person.</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 💌 REASONS I LOVE YOU — RANDOM GENERATOR -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="reasons-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ from the heart ✦</span>
+        <h2 class="section-title">Reasons I <em>Love</em> You</h2>
+      </div>
+
+      <div class="glass-card reasons-card">
+        <div class="reasons-display" id="reasons-display">
+          <span class="reasons-emoji" id="reasons-emoji">💌</span>
+          <p class="reasons-text" id="reasons-text">Click the button below to discover a reason why I love you...</p>
         </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">Every Day After</div>
-          <h3 class="timeline-title">Little Moments 🌸</h3>
-          <p class="timeline-text">Laughs, late talks, quiet comfort — magic in ordinary days.</p>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-date">Forever Ahead</div>
-          <h3 class="timeline-title">Still Writing Our Story 🌙</h3>
-          <p class="timeline-text">This is only the beginning of a beautiful forever.</p>
+        <button class="reasons-btn" onclick="showRandomReason()" type="button">
+          <span>✨ Show Me a Reason 💕</span>
+        </button>
+        <div class="reasons-counter">
+          <span id="reasons-seen">0</span> reasons discovered so far
         </div>
       </div>
     </section>
@@ -303,7 +324,7 @@
 
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
           <div class="polaroid-img">
-            <img src="images\photo12.jpeg" alt="This day" loading="lazy" />
+            <img src="images/photo4.jpeg" alt="This day" loading="lazy" />
           </div>
           <p class="polaroid-caption">This day 🥰</p>
           <span class="polaroid-heart">💝</span>
@@ -343,7 +364,7 @@
 
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
           <div class="polaroid-img">
-            <img src="images/photo10.jpeg" alt="Our special moments" loading="lazy" />
+            <img src="images/photo1.jpeg" alt="Our special moments" loading="lazy" />
           </div>
           <p class="polaroid-caption">My Heart 🥰</p>
           <span class="polaroid-heart">💫</span>
@@ -352,6 +373,42 @@
       </div>
     </section>
 
+    <!-- LOVE TIMELINE -->
+    <section class="timeline-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ chapters ✦</span>
+        <h2 class="section-title">Our <em>Love</em> Timeline</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">The Beginning</div>
+          <h3 class="timeline-title">When Our Eyes Met ✨</h3>
+          <p class="timeline-text">A moment that felt ordinary — until it rewrote everything.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">May 29, 2026</div>
+          <h3 class="timeline-title">We Became Us 💕</h3>
+          <p class="timeline-text">8:17 PM — the second my world found its favorite person.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Every Day After</div>
+          <h3 class="timeline-title">Little Moments 🌸</h3>
+          <p class="timeline-text">Laughs, late talks, quiet comfort — magic in ordinary days.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Forever Ahead</div>
+          <h3 class="timeline-title">Still Writing Our Story 🌙</h3>
+          <p class="timeline-text">This is only the beginning of a beautiful forever.</p>
+        </div>
+      </div>
+    </section>
+
+    
     <!-- SLIDESHOW -->
     <section class="slideshow-section reveal">
       <div class="section-label">
@@ -377,7 +434,7 @@
 
           <div class="slide" id="slide-2">
             <div>
-              <img src="images/photo12.jpeg" alt="You make me smile" />
+              <img src="images/naincy.png" alt="You make me smile" />
             </div>
             <div class="slide-caption-bar">You make me smile 💕</div>
           </div>
@@ -399,6 +456,269 @@
             <div class="slide-dot" onclick="goSlide(3)" role="button" tabindex="0" aria-label="Slide 4"></div>
           </div>
           <button class="slide-btn" onclick="nextSlide()" type="button" aria-label="Next slide">›</button>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ⚖️ FUTURE LAWYER NAINCY — MOTIVATIONAL SECTION -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="lawyer-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ your dream, my pride ✦</span>
+        <h2 class="section-title">Future <em>Lawyer</em> Naincy ⚖️</h2>
+      </div>
+
+      <div class="glass-card lawyer-card">
+        <div class="lawyer-hero">
+          <div class="lawyer-icon-wrap">
+            <span class="lawyer-big-icon">⚖️</span>
+          </div>
+          <h3 class="lawyer-heading">To the woman who will change the world</h3>
+          <p class="lawyer-intro">
+            Naincy, I know your dream is to become a <strong>lawyer</strong> — and I want you to know that
+            I believe in you more than words can ever say. Every late-night study session, every page you read,
+            every concept you master — it's all building the <em>incredible lawyer</em> you're going to be. 🌟
+          </p>
+        </div>
+
+        <div class="lawyer-qualities">
+          <div class="lawyer-quality">
+            <span class="lq-icon">🧠</span>
+            <h4>Brilliant Mind</h4>
+            <p>You have the sharpest mind I've ever known. The courtroom won't know what hit it!</p>
+          </div>
+          <div class="lawyer-quality">
+            <span class="lq-icon">💪</span>
+            <h4>Unstoppable Spirit</h4>
+            <p>No challenge is too big for you. You face everything with courage and grace.</p>
+          </div>
+          <div class="lawyer-quality">
+            <span class="lq-icon">❤️</span>
+            <h4>Heart of Justice</h4>
+            <p>You care deeply about what's right — that's what will make you an extraordinary lawyer.</p>
+          </div>
+          <div class="lawyer-quality">
+            <span class="lq-icon">🗣️</span>
+            <h4>Powerful Voice</h4>
+            <p>Your words have power. You'll use them to fight for those who can't fight for themselves.</p>
+          </div>
+        </div>
+
+        <div class="lawyer-promise">
+          <span class="lawyer-promise-icon">🤝</span>
+          <p class="lawyer-promise-text">
+            "I promise to always be your biggest cheerleader — during exam stress, during late-night revisions,
+            during moments of self-doubt. I'll bring you chai ☕, I'll listen to you practice arguments,
+            and I'll celebrate every small victory with you. You've got this, <em>Advocate Naincy</em>! 💕⚖️"
+          </p>
+          <span class="lawyer-promise-sign">— Your forever supporter, Ankit 💕</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 💪 DAILY MOTIVATION QUOTES -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="motivation-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ daily dose of inspiration ✦</span>
+        <h2 class="section-title">Daily <em>Motivation</em> for You</h2>
+      </div>
+
+      <div class="glass-card motivation-card">
+        <div class="motivation-icon" id="motivation-icon">💫</div>
+        <blockquote class="motivation-quote" id="motivation-quote">
+          "The only way to do great work is to love what you do."
+        </blockquote>
+        <p class="motivation-author" id="motivation-author">— Steve Jobs</p>
+        <div class="motivation-note" id="motivation-note">
+          <em>Remember Naincy: Every great lawyer started exactly where you are right now. Keep going! 💪⚖️</em>
+        </div>
+        <button class="motivation-btn" onclick="showNewQuote()" type="button">
+          <span>🔄 New Inspiration</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 📚 STUDY TIMER (POMODORO) -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="study-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ study time ✦</span>
+        <h2 class="section-title">Study <em>Timer</em> for My Lawyer 📚</h2>
+      </div>
+
+      <div class="glass-card study-card">
+        <p class="study-desc">My love, use this timer for focused study sessions. I'll be cheering for you every minute! 💕📖</p>
+
+        <div class="study-timer-display">
+          <div class="study-timer-ring" id="study-timer-ring">
+            <span class="study-timer-time" id="study-timer-time">25:00</span>
+            <span class="study-timer-label" id="study-timer-label">Focus Time</span>
+          </div>
+        </div>
+
+        <div class="study-presets">
+          <button class="study-preset active" onclick="setStudyTime(25)" type="button" data-time="25">25 min</button>
+          <button class="study-preset" onclick="setStudyTime(15)" type="button" data-time="15">15 min</button>
+          <button class="study-preset" onclick="setStudyTime(45)" type="button" data-time="45">45 min</button>
+          <button class="study-preset" onclick="setStudyTime(60)" type="button" data-time="60">60 min</button>
+        </div>
+
+        <div class="study-controls">
+          <button class="study-ctrl-btn" onclick="startStudyTimer()" type="button" id="study-start-btn">
+            <i class="fas fa-play"></i> Start
+          </button>
+          <button class="study-ctrl-btn" onclick="pauseStudyTimer()" type="button" id="study-pause-btn" style="display:none;">
+            <i class="fas fa-pause"></i> Pause
+          </button>
+          <button class="study-ctrl-btn study-reset" onclick="resetStudyTimer()" type="button">
+            <i class="fas fa-redo"></i> Reset
+          </button>
+        </div>
+
+        <div class="study-message" id="study-message">
+          <span class="study-msg-icon">📖</span>
+          <span class="study-msg-text" id="study-msg-text">Ready to study, my love? You've got this! ⚖️💕</span>
+        </div>
+
+        <div class="study-sessions">
+          <span class="study-sessions-label">Sessions completed today:</span>
+          <span class="study-sessions-num" id="study-sessions-count">0</span>
+          <span class="study-sessions-emoji">🏆</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 🏆 DREAM BOARD -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="dream-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ your dreams matter ✦</span>
+        <h2 class="section-title">Naincy's <em>Dream</em> Board 🏆</h2>
+      </div>
+
+      <div class="dream-board">
+        <div class="dream-card glass-card">
+          <span class="dream-card-icon">📚</span>
+          <h4 class="dream-card-title">Law School</h4>
+          <p class="dream-card-text">Acing every exam, mastering every subject, making your mark</p>
+          <div class="dream-card-progress">
+            <div class="dream-progress-bar"><div class="dream-progress-fill" style="width:40%"></div></div>
+            <span class="dream-progress-label">In Progress ✨</span>
+          </div>
+        </div>
+
+        <div class="dream-card glass-card">
+          <span class="dream-card-icon">⚖️</span>
+          <h4 class="dream-card-title">First Case</h4>
+          <p class="dream-card-text">Walking into the courtroom for the very first time, ready to fight for justice</p>
+          <div class="dream-card-progress">
+            <div class="dream-progress-bar"><div class="dream-progress-fill" style="width:20%"></div></div>
+            <span class="dream-progress-label">Dreaming 🌙</span>
+          </div>
+        </div>
+
+        <div class="dream-card glass-card">
+          <span class="dream-card-icon">🎓</span>
+          <h4 class="dream-card-title">Graduation Day</h4>
+          <p class="dream-card-text">That cap and gown moment — I'll be there cheering the loudest!</p>
+          <div class="dream-card-progress">
+            <div class="dream-progress-bar"><div class="dream-progress-fill" style="width:30%"></div></div>
+            <span class="dream-progress-label">On the way 💪</span>
+          </div>
+        </div>
+
+        <div class="dream-card glass-card">
+          <span class="dream-card-icon">🏛️</span>
+          <h4 class="dream-card-title">Own Law Firm</h4>
+          <p class="dream-card-text">One day, "Advocate Naincy" will have her own firm — and I'll be your biggest client 😄</p>
+          <div class="dream-card-progress">
+            <div class="dream-progress-bar"><div class="dream-progress-fill" style="width:10%"></div></div>
+            <span class="dream-progress-label">Future Vision 🌟</span>
+          </div>
+        </div>
+
+        <div class="dream-card glass-card dream-card-special">
+          <span class="dream-card-icon">💕</span>
+          <h4 class="dream-card-title">Our Forever</h4>
+          <p class="dream-card-text">Building a beautiful life together — your dreams + my love = our happy ending</p>
+          <div class="dream-card-progress">
+            <div class="dream-progress-bar"><div class="dream-progress-fill dream-progress-love" style="width:100%"></div></div>
+            <span class="dream-progress-label">Already happening 💕</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 📝 LOVE LETTER (TYPEWRITER EFFECT) -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="letter-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ a letter for you ✦</span>
+        <h2 class="section-title">My <em>Love</em> Letter 💌</h2>
+      </div>
+
+      <div class="glass-card letter-card">
+        <div class="letter-paper">
+          <div class="letter-date">Written with love, just for you 💕</div>
+          <div class="letter-greeting">My Dearest Naincy,</div>
+          <div class="letter-body" id="letter-body">
+            <span class="letter-typed" id="letter-typed"></span><span class="letter-cursor" id="letter-cursor">|</span>
+          </div>
+          <div class="letter-sign">Forever & always yours,<br><span class="letter-sign-name">Ankit 💕</span></div>
+        </div>
+        <button class="letter-replay-btn" onclick="replayLetter()" type="button">
+          <span>🔄 Read Again</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- 🌟 I BELIEVE IN YOU — PROMISES -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="promises-section reveal">
+      <div class="section-label">
+        <span class="section-eyebrow">✦ my promises to you ✦</span>
+        <h2 class="section-title">I <em>Believe</em> in You 🌟</h2>
+      </div>
+
+      <div class="promises-grid">
+        <div class="glass-card promise-card">
+          <span class="promise-icon">🤝</span>
+          <h4 class="promise-title">I Promise to Support You</h4>
+          <p class="promise-text">In every exam, every challenge, every dream — I'll be right beside you, always.</p>
+        </div>
+        <div class="glass-card promise-card">
+          <span class="promise-icon">☕</span>
+          <h4 class="promise-title">I Promise Late-Night Chai</h4>
+          <p class="promise-text">When you're studying late, I'll make sure you have chai, snacks, and my full attention.</p>
+        </div>
+        <div class="glass-card promise-card">
+          <span class="promise-icon">👂</span>
+          <h4 class="promise-title">I Promise to Listen</h4>
+          <p class="promise-text">Every vent, every worry, every excitement — I want to hear it all, always.</p>
+        </div>
+        <div class="glass-card promise-card">
+          <span class="promise-icon">🎉</span>
+          <h4 class="promise-title">I Promise to Celebrate You</h4>
+          <p class="promise-text">Every small win, every milestone — we'll celebrate together like it's the biggest thing ever.</p>
+        </div>
+        <div class="glass-card promise-card">
+          <span class="promise-icon">💪</span>
+          <h4 class="promise-title">I Promise to Motivate You</h4>
+          <p class="promise-text">When you doubt yourself, I'll remind you how incredible you are — because you truly are.</p>
+        </div>
+        <div class="glass-card promise-card">
+          <span class="promise-icon">💕</span>
+          <h4 class="promise-title">I Promise Forever Love</h4>
+          <p class="promise-text">Through law school, through career, through everything — my love for you will only grow stronger.</p>
         </div>
       </div>
     </section>
@@ -515,15 +835,6 @@
   </button>
   <div class="lightbox-content" id="lightboxContent"></div>
 </div>
-
-<!-- WhatsApp Share -->
-<!-- <button class="whatsapp-share-btn" onclick="shareOnWhatsApp()" type="button">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.524 5.849L0 24l6.302-1.499C8.016 23.46 9.973 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.896 0-3.662-.523-5.17-1.433l-.37-.221-3.741.891.944-3.639-.244-.388A9.937 9.937 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/>
-  </svg>
-  <span>Share on WhatsApp 💕</span>
-</button> -->
 
 </body>
 </html>
