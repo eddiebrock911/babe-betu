@@ -156,6 +156,9 @@ function sendMessage() {
   chatRef.push(msgData);
   input.value = "";
 
+  // Close emoji picker if open
+  if (emojiPickerOpen) toggleEmojiPicker();
+
   // Play send sound
   playSendSound();
 
@@ -172,6 +175,15 @@ function sendMessage() {
     lower.includes("💕💕💕")
   ) {
     triggerLoveRain();
+  }
+}
+
+// ─── QUICK REPLY (called from HTML onclick) ──────────────
+function quickReply(text) {
+  const input = document.getElementById("chat-input");
+  if (input) {
+    input.value = text;
+    sendMessage();
   }
 }
 
@@ -341,44 +353,8 @@ function closeReactionPicker() {
   }
 }
 
-// ─── QUICK ROMANTIC REPLIES ──────────────────────────────
-const QUICK_REPLIES = [
-  "I love you 💕",
-  "Miss you 🥺",
-  "Good morning ☀️",
-  "Good night 🌙",
-  "You're the best 🥰",
-  "Thinking of you 💭",
-  "Hugs 🤗",
-  "😘😘😘"
-];
-
-function buildQuickReplies() {
-  let container = document.getElementById("chat-quick-replies");
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "chat-quick-replies";
-    container.className = "chat-quick-replies";
-
-    QUICK_REPLIES.forEach((reply) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "chat-quick-btn";
-      btn.textContent = reply;
-      btn.addEventListener("click", () => {
-        const input = document.getElementById("chat-input");
-        if (input) {
-          input.value = reply;
-          sendMessage();
-        }
-      });
-      container.appendChild(btn);
-    });
-
-    const inputRow = document.querySelector(".chat-input-row");
-    if (inputRow) inputRow.parentElement.insertBefore(container, inputRow);
-  }
-}
+// ─── QUICK REPLY BUTTONS — now in HTML directly ──────────
+// (No dynamic creation needed — buttons are in index.html with onclick="quickReply(...)")
 
 // ─── RENDER MESSAGES ─────────────────────────────────────
 let lastMsgCount = 0;
@@ -731,7 +707,7 @@ function enhanceChatUI() {
   const chatBox = document.getElementById("chat-box");
   if (!chatBox) return;
 
-  // Add typing indicator element
+  // Add typing indicator element (only if not already present)
   if (!document.getElementById("chat-typing")) {
     const typingEl = document.createElement("div");
     typingEl.id = "chat-typing";
@@ -744,20 +720,7 @@ function enhanceChatUI() {
     }
   }
 
-  // Add emoji toggle button to input row
-  const inputRow = document.querySelector(".chat-input-row");
-  if (inputRow && !document.getElementById("chat-emoji-toggle")) {
-    const emojiBtn = document.createElement("button");
-    emojiBtn.type = "button";
-    emojiBtn.id = "chat-emoji-toggle";
-    emojiBtn.className = "chat-extra-btn";
-    emojiBtn.textContent = "😊";
-    emojiBtn.title = "Emoji";
-    emojiBtn.addEventListener("click", toggleEmojiPicker);
-    inputRow.insertBefore(emojiBtn, inputRow.firstChild);
-  }
-
-  // Add sound toggle to chat header
+  // Add sound toggle to chat header (only if not already present)
   const chatHeader = chatBox.querySelector(".chat-header");
   if (chatHeader && !document.getElementById("chat-sound-toggle")) {
     const soundBtn = document.createElement("button");
@@ -773,14 +736,12 @@ function enhanceChatUI() {
       chatHeader.insertBefore(soundBtn, closeBtn);
     }
   }
-
-  // Build quick replies
-  buildQuickReplies();
 }
 
 // ─── EXPOSE FOR INLINE HANDLERS ──────────────────────────
 window.toggleChat = toggleChat;
 window.sendMessage = sendMessage;
+window.quickReply = quickReply;
 window.toggleEmojiPicker = toggleEmojiPicker;
 window.toggleChatSound = toggleChatSound;
 window.deleteMessage = deleteMessage;
