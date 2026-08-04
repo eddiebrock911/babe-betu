@@ -33,7 +33,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
 <script src="live-chat.js" defer></script>
 <script src="script.js" defer></script>
 </head>
@@ -289,7 +288,7 @@
       <div class="polaroid-grid" id="polaroid-grid">
         <div class="polaroid" onclick="openZoomFromPolaroid(this)">
           <div class="polaroid-img">
-            <img src="\video\video4.mp4" alt="My favourite smile" loading="lazy" />
+            <img src="images/photo1.jpeg" alt="My favourite smile" loading="lazy" />
           </div>
           <p class="polaroid-caption">My favourite smile 💕</p>
           <span class="polaroid-heart">💖</span>
@@ -824,14 +823,18 @@
 
   <div class="chat-input-row">
     <button type="button" class="chat-extra-btn" id="chat-emoji-toggle" onclick="toggleEmojiPicker()" title="Emoji">😊</button>
-    <button type="button" class="chat-extra-btn" id="chat-photo-btn" onclick="document.getElementById('chat-photo-input').click()" title="Send photo" aria-label="Send photo">📷</button>
-    <input type="file" id="chat-photo-input" accept="image/*" hidden />
     <input type="text" id="chat-input" placeholder="Type a sweet message..." maxlength="500" onkeydown="if(event.key==='Enter') sendMessage()" />
     <button onclick="sendMessage()" type="button" aria-label="Send">➤</button>
   </div>
 </div>
 
-<!-- Floating Instagram -->
+<!-- Floating Contacts -->
+<a href="https://bdaykit.onrender.com/" target="_blank" class="floating-contact-bday" rel="noopener noreferrer">
+  <!-- <span class="bday-gift-icon">🎂</span> -->
+   <i class="fa fa-birthday-cake" style="font-size:25px;color:rgb(229, 189, 69)"></i>
+  <span>B'day Surprise</span>
+</a>
+
 <a href="https://www.instagram.com/__ankit._.op_/" target="_blank" class="floating-contact-betu" rel="noopener noreferrer">
   <i class="fab fa-instagram"></i>
   <span>Betu ❤️</span>
