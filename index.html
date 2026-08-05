@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="description" content="Ankit Kumar — Girlfriend Naincy's Little World 💕 | A special website made with love for my girlfriend Naincy.">
 <meta name="keywords" content="Ankit Kumar, Naincy and Ankit, Girlfriend, Love, Special Website, Romantic, Personal Website, Love Story, Memories">
 <meta name="author" content="Ankit Kumar">
@@ -33,7 +33,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
 <script src="live-chat.js" defer></script>
 <script src="script.js" defer></script>
 </head>
@@ -822,15 +821,17 @@
     <button type="button" class="chat-quick-btn" onclick="quickReply('😘😘😘')">😘😘😘</button>
   </div>
 
+  <!-- ✅ FIXED: Send button now uses Font Awesome icon + proper class -->
   <div class="chat-input-row">
     <button type="button" class="chat-extra-btn" id="chat-emoji-toggle" onclick="toggleEmojiPicker()" title="Emoji">😊</button>
     <input type="text" id="chat-input" placeholder="Type a sweet message..." maxlength="500" onkeydown="if(event.key==='Enter') sendMessage()" />
-    <button onclick="sendMessage()" type="button" aria-label="Send">➤</button>
+    <button class="chat-send-btn" onclick="sendMessage()" type="button" aria-label="Send">
+      <i class="fas fa-paper-plane"></i>
+    </button>
   </div>
 </div>
 
 <!-- Floating Contacts -->
-
 <!-- <a href="https://bdaykit.onrender.com/" target="_blank" class="floating-contact-bday" rel="noopener noreferrer">
    <i class="fa fa-birthday-cake" style="font-size:25px;color:rgb(229, 189, 69)"></i>
   <span>B'day Surprise</span>
@@ -859,5 +860,5 @@
   <div class="lightbox-content" id="lightboxContent"></div>
 </div>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2639e1b0a86fc3c',t:'MTc4NTkxMDAwNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
