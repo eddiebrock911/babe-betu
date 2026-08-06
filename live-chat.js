@@ -1115,15 +1115,18 @@ function toggleGifPicker() {
   }
 }
 
+
 // ─── KLIPY: Load Trending GIFs ────────────────────────────
 function loadKlipyTrending() {
   const results = document.getElementById("gif-results");
   if (!results) return;
   
+  /*
   if (!KLIPY_API_KEY) {
     results.innerHTML = '<p class="gif-error">⚠️ Klipy API key not set! Add your key in live-chat.js</p>';
     return;
   }
+  */
   
   results.innerHTML = '<p class="gif-loading">🔥 Loading trending GIFs...</p>';
   
@@ -1200,7 +1203,7 @@ function searchKlipyGifs(query) {
     return;
   }
   
-  if (!KLIPY_API_KEY || KLIPY_API_KEY === "FsTUSFpgCVoWOk3yQo7HIHCvTe0UXx55To9hyZLFUAmgphfQaXpyhPFSEUTU8bN8") {
+  if (!KLIPY_API_KEY) {
     results.innerHTML = '<p class="gif-error">⚠️ Klipy API key not set! Add your key in live-chat.js</p>';
     return;
   }
