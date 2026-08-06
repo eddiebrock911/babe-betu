@@ -1075,7 +1075,14 @@ function sendSticker(sticker) {
   if (stickerPickerOpen) toggleStickerPicker();
 }
 
-// ─── GIF SEARCH ───────────────────────────────────────────
+// ─── GIF SEARCH (KLIPY API) ──────────────────────────────
+// 🔑 PASTE YOUR KLIPY API KEY BELOW (get it from https://partner.klipy.com/api-keys)
+const KLIPY_API_KEY = "FsTUSFpgCVoWOk3yQo7HIHCvTe0UXx55To9hyZLFUAmgphfQaXpyhPFSEUTU8bN8";
+const KLIPY_BASE_URL = "https://api.klipy.com/api/v1";
+let klipyCurrentPage = 1;
+let klipyCurrentQuery = "";
+let klipyHasNext = false;
+
 function toggleGifPicker() {
   gifPickerOpen = !gifPickerOpen;
   let picker = document.getElementById("chat-gif-picker");
@@ -1086,11 +1093,11 @@ function toggleGifPicker() {
     picker.className = "chat-gif-picker";
     picker.innerHTML = `
       <div class="gif-search-row">
-        <input type="text" id="gif-search-input" placeholder="Search GIFs..." onkeydown="if(event.key==='Enter') searchGifs(this.value)" />
-        <button onclick="searchGifs(document.getElementById('gif-search-input').value)">🔍</button>
+        <input type="text" id="gif-search-input" placeholder="Search GIFs on Klipy..." onkeydown="if(event.key==='Enter') searchKlipyGifs(this.value)" />
+        <button onclick="searchKlipyGifs(document.getElementById('gif-search-input').value)">🔍</button>
       </div>
       <div class="gif-results" id="gif-results">
-        <p class="gif-hint">Search for love, cute, happy GIFs...</p>
+        <p class="gif-hint">🎭 Powered by Klipy — Search love, cute, happy GIFs...</p>
       </div>
     `;
     const inputRow = document.querySelector(".chat-input-row");
@@ -1103,44 +1110,243 @@ function toggleGifPicker() {
       const inp = document.getElementById("gif-search-input");
       if (inp) inp.focus();
     }, 200);
-    // Load default GIFs
-    searchGifs("love cute");
+    // Load trending GIFs on open
+    loadKlipyTrending();
   }
 }
 
-function searchGifs(query) {
+// ─── KLIPY: Load Trending GIFs ────────────────────────────
+function loadKlipyTrending() {
   const results = document.getElementById("gif-results");
   if (!results) return;
   
-  // Using Giphy's public beta key for demo
-  const apiKey = "dc6zaTOxFJmzC"; // Giphy public beta key
-  const url = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(query)}&limit=12&rating=g`;
+  if (!KLIPY_API_KEY) {
+    results.innerHTML = '<p class="gif-error">⚠️ Klipy API key not set! Add your key in live-chat.js</p>';
+    return;
+  }
   
-  results.innerHTML = '<p class="gif-loading">Loading GIFs...</p>';
+  results.innerHTML = '<p class="gif-loading">🔥 Loading trending GIFs...</p>';
+  
+  const url = `${KLIPY_BASE_URL}/${KLIPY_API_KEY}/gifs/trending?per_page=24&locale=in_IN`;
   
   fetch(url)
     .then(r => r.json())
-    .then(data => {
-      if (!data.data || data.data.length === 0) {
-        results.innerHTML = '<p class="gif-empty">No GIFs found</p>';
+    .then(response => {
+      if (!response.result || !response.data || !response.data.data || response.data.data.length === 0) {
+        results.innerHTML = '<p class="gif-empty">No trending GIFs found</p>';
         return;
       }
-      results.innerHTML = data.data.map(gif => `
-        <img class="gif-thumb" src="${gif.images.fixed_height_small.url}" 
-             onclick="sendGif('${gif.images.original.url}', '${gif.images.fixed_height_small.url}')"
-             alt="GIF" loading="lazy" />
-      `).join("");
+      
+      klipyHasNext = response.data.has_next;
+      klipyCurrentPage = response.data.current_page;
+      klipyCurrentQuery = "";
+      
+      renderKlipyGifs(response.data.data, results);
+      
+      // Add "Load More" button if there are more results
+      if (klipyHasNext) {
+        const loadMoreBtn = document.createElement("button");
+        loadMoreBtn.className = "gif-load-more";
+        loadMoreBtn.textContent = "Load More Trending 🔥";
+        loadMoreBtn.onclick = () => loadKlipyTrendingMore();
+        results.appendChild(loadMoreBtn);
+      }
     })
-    .catch(() => {
-      results.innerHTML = '<p class="gif-error">Could not load GIFs. Try again!</p>';
+    .catch(err => {
+      results.innerHTML = '<p class="gif-error">Could not load GIFs. Check API key or try again!</p>';
+      console.error("Klipy trending error:", err);
     });
 }
 
-function sendGif(originalUrl, thumbUrl) {
+function loadKlipyTrendingMore() {
+  const results = document.getElementById("gif-results");
+  if (!results) return;
+  
+  const nextPage = klipyCurrentPage + 1;
+  const url = `${KLIPY_BASE_URL}/${KLIPY_API_KEY}/gifs/trending?per_page=24&page=${nextPage}&locale=in_IN`;
+  
+  // Remove load more button
+  const loadMore = results.querySelector(".gif-load-more");
+  if (loadMore) loadMore.remove();
+  
+  fetch(url)
+    .then(r => r.json())
+    .then(response => {
+      if (!response.result || !response.data || !response.data.data) return;
+      
+      klipyHasNext = response.data.has_next;
+      klipyCurrentPage = response.data.current_page;
+      
+      renderKlipyGifs(response.data.data, results, true);
+      
+      if (klipyHasNext) {
+        const loadMoreBtn = document.createElement("button");
+        loadMoreBtn.className = "gif-load-more";
+        loadMoreBtn.textContent = "Load More 🔥";
+        loadMoreBtn.onclick = () => loadKlipyTrendingMore();
+        results.appendChild(loadMoreBtn);
+      }
+    })
+    .catch(err => console.error("Klipy trending more error:", err));
+}
+
+// ─── KLIPY: Search GIFs ──────────────────────────────────
+function searchKlipyGifs(query) {
+  const results = document.getElementById("gif-results");
+  if (!results) return;
+  
+  if (!query || !query.trim()) {
+    loadKlipyTrending();
+    return;
+  }
+  
+  if (!KLIPY_API_KEY || KLIPY_API_KEY === "FsTUSFpgCVoWOk3yQo7HIHCvTe0UXx55To9hyZLFUAmgphfQaXpyhPFSEUTU8bN8") {
+    results.innerHTML = '<p class="gif-error">⚠️ Klipy API key not set! Add your key in live-chat.js</p>';
+    return;
+  }
+  
+  results.innerHTML = '<p class="gif-loading">🔍 Searching GIFs...</p>';
+  klipyCurrentQuery = query;
+  klipyCurrentPage = 1;
+  
+  const url = `${KLIPY_BASE_URL}/${KLIPY_API_KEY}/gifs/search?q=${encodeURIComponent(query)}&per_page=24&locale=in_IN&rating=g`;
+  
+  fetch(url)
+    .then(r => r.json())
+    .then(response => {
+      if (!response.result || !response.data || !response.data.data || response.data.data.length === 0) {
+        results.innerHTML = '<p class="gif-empty">No GIFs found for "' + escapeHtml(query) + '"</p>';
+        return;
+      }
+      
+      klipyHasNext = response.data.has_next;
+      klipyCurrentPage = response.data.current_page;
+      
+      renderKlipyGifs(response.data.data, results);
+      
+      if (klipyHasNext) {
+        const loadMoreBtn = document.createElement("button");
+        loadMoreBtn.className = "gif-load-more";
+        loadMoreBtn.textContent = "Load More Results 🔍";
+        loadMoreBtn.onclick = () => searchKlipyGifsMore();
+        results.appendChild(loadMoreBtn);
+      }
+    })
+    .catch(err => {
+      results.innerHTML = '<p class="gif-error">Could not search GIFs. Try again!</p>';
+      console.error("Klipy search error:", err);
+    });
+}
+
+function searchKlipyGifsMore() {
+  const results = document.getElementById("gif-results");
+  if (!results || !klipyCurrentQuery) return;
+  
+  const nextPage = klipyCurrentPage + 1;
+  const url = `${KLIPY_BASE_URL}/${KLIPY_API_KEY}/gifs/search?q=${encodeURIComponent(klipyCurrentQuery)}&per_page=24&page=${nextPage}&locale=in_IN&rating=g`;
+  
+  const loadMore = results.querySelector(".gif-load-more");
+  if (loadMore) loadMore.remove();
+  
+  fetch(url)
+    .then(r => r.json())
+    .then(response => {
+      if (!response.result || !response.data || !response.data.data) return;
+      
+      klipyHasNext = response.data.has_next;
+      klipyCurrentPage = response.data.current_page;
+      
+      renderKlipyGifs(response.data.data, results, true);
+      
+      if (klipyHasNext) {
+        const loadMoreBtn = document.createElement("button");
+        loadMoreBtn.className = "gif-load-more";
+        loadMoreBtn.textContent = "Load More 🔍";
+        loadMoreBtn.onclick = () => searchKlipyGifsMore();
+        results.appendChild(loadMoreBtn);
+      }
+    })
+    .catch(err => console.error("Klipy search more error:", err));
+}
+
+// Keep old function name for backwards compatibility
+function searchGifs(query) {
+  searchKlipyGifs(query);
+}
+
+// ─── KLIPY: Render GIF Grid ──────────────────────────────
+function renderKlipyGifs(gifData, container, append = false) {
+  if (!append) container.innerHTML = "";
+  
+  gifData.forEach(gif => {
+    // Klipy response structure: each gif has id, title, slug, file (with sizes)
+    // file structure: { xs: {jpg: {url}}, sm: {jpg: {url}}, md: {gif: {url}}, hd: {gif: {url}} }
+    const files = gif.file || gif.files || {};
+    
+    // Get thumbnail URL (small preview)
+    let thumbUrl = "";
+    if (files.xs && files.xs.jpg && files.xs.jpg.url) {
+      thumbUrl = files.xs.jpg.url;
+    } else if (files.sm && files.sm.jpg && files.sm.jpg.url) {
+      thumbUrl = files.sm.jpg.url;
+    } else if (files.xs && files.xs.gif && files.xs.gif.url) {
+      thumbUrl = files.xs.gif.url;
+    }
+    
+    // Get full GIF URL
+    let fullUrl = "";
+    if (files.hd && files.hd.gif && files.hd.gif.url) {
+      fullUrl = files.hd.gif.url;
+    } else if (files.md && files.md.gif && files.md.gif.url) {
+      fullUrl = files.md.gif.url;
+    } else if (files.gif && files.gif.url) {
+      fullUrl = files.gif.url;
+    } else if (files.sm && files.sm.gif && files.sm.gif.url) {
+      fullUrl = files.sm.gif.url;
+    }
+    
+    // Fallback: use slug-based URL
+    if (!thumbUrl && gif.slug) {
+      thumbUrl = `https://media.klipy.com/320/${gif.slug}.gif`;
+    }
+    if (!fullUrl && gif.slug) {
+      fullUrl = `https://media.klipy.com/${gif.slug}.gif`;
+    }
+    
+    // Use gif.url or gif.src as ultimate fallback
+    if (!thumbUrl) thumbUrl = gif.url || gif.src || "";
+    if (!fullUrl) fullUrl = gif.url || gif.src || thumbUrl;
+    
+    if (!thumbUrl) return; // Skip if no URL found
+    
+    const img = document.createElement("img");
+    img.className = "gif-thumb";
+    img.src = thumbUrl;
+    img.alt = gif.title || "GIF";
+    img.loading = "lazy";
+    img.title = gif.title || "";
+    img.setAttribute("data-full", fullUrl);
+    img.setAttribute("data-thumb", thumbUrl);
+    
+    // Escape URLs for onclick
+    const escapedFull = fullUrl.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    const escapedThumb = thumbUrl.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    
+    img.onclick = function() {
+      sendKlipyGif(escapedFull, escapedThumb);
+    };
+    
+    container.appendChild(img);
+  });
+}
+
+// ─── KLIPY: Send GIF ─────────────────────────────────────
+function sendKlipyGif(fullUrl, thumbUrl) {
   chatRef.push({
     type: "gif",
     gifUrl: thumbUrl,
-    gifOriginal: originalUrl,
+    gifOriginal: fullUrl,
+    gifProvider: "klipy",
     sender: myName,
     timestamp: Date.now(),
     deviceId: myDeviceId,
@@ -1148,6 +1354,12 @@ function sendGif(originalUrl, thumbUrl) {
   });
   playSendSound();
   if (gifPickerOpen) toggleGifPicker();
+  showPremiumToast("GIF sent! 🎭");
+}
+
+// Keep old function name for backwards compatibility
+function sendGif(originalUrl, thumbUrl) {
+  sendKlipyGif(originalUrl, thumbUrl);
 }
 
 // ─── DOUBLE TAP LIKE ──────────────────────────────────────
