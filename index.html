@@ -20,21 +20,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
 
-<!-- Critical music-player fallback styles: keeps the player hidden and functional even if cached CSS is stale. -->
-<style id="music-player-critical">
-  .player-backdrop{position:fixed;inset:0;z-index:2500;background:rgba(0,0,0,.45);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease,visibility .3s ease}
-  .player-backdrop.open{opacity:1;visibility:visible;pointer-events:auto}
-  .player-panel{position:fixed;top:88px;right:24px;width:min(380px,calc(100vw - 24px));max-height:calc(100vh - 110px);z-index:2600;display:flex;flex-direction:column;box-sizing:border-box;padding:18px;border-radius:24px;background:linear-gradient(160deg,rgba(28,12,40,.98),rgba(12,6,22,.99));border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 80px rgba(0,0,0,.55);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-12px) scale(.97);transition:opacity .3s ease,visibility .3s ease,transform .3s ease;overflow:hidden}
-  .player-panel.open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1)}
-  .player-playlist{display:flex;flex-direction:column;gap:7px;overflow-y:auto;min-height:0;max-height:240px;margin-top:8px;padding-right:3px}
-  .playlist-item{width:100%;min-height:56px;display:flex;align-items:center;gap:10px;padding:10px 11px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.045);color:inherit;text-align:left;cursor:pointer}
-  .playlist-item:hover{background:rgba(255,77,141,.12);border-color:rgba(255,77,141,.25)}
-  .playlist-item.active{background:rgba(255,77,141,.14);border-color:rgba(255,77,141,.35)}
-  .playlist-info{min-width:0;flex:1}.playlist-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.playlist-sub{font-size:.75rem;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.playlist-num{width:24px;flex:0 0 24px;text-align:center;opacity:.6}.playlist-emoji{font-size:1.1rem}
-  @media(max-width:520px){.player-panel{top:74px;right:12px;width:calc(100vw - 24px);max-height:calc(100vh - 88px);padding:14px}.player-playlist{max-height:220px}}
-</style>
-
-<link rel="icon" type="image/png" href="images/icon.png">
+<link rel="icon" type="image/png" href="images\icon.png">
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CKVS3DGNZ7"></script>
@@ -194,10 +180,10 @@
         id="volume-slider"
         min="0"
         max="100"
-        value="55"
+        value="65"
         aria-label="Volume"
       />
-      <span class="vol-pct" id="vol-pct">55%</span>
+      <span class="vol-pct" id="vol-pct">65%</span>
     </div>
 
     <!-- Playlist -->
@@ -271,8 +257,7 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 🤗 VIRTUAL HUG BUTTON -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="hug-section reveal">
+    <!-- <section class="hug-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ when you need me ✦</span>
         <h2 class="section-title">Send Yourself a <em>Warm Hug</em></h2>
@@ -289,8 +274,7 @@
           <span class="hug-counter-num" id="hug-count">0</span>
         </div>
       </div>
-    </section>
-</template>
+    </section> -->
 
      <!-- ════════════════════════════════════════════ -->
     <!-- POLAROID GALLERY -->
@@ -372,8 +356,7 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 💌 REASONS I LOVE YOU — RANDOM GENERATOR -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="reasons-section reveal">
+    <!-- <section class="reasons-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ from the heart ✦</span>
         <h2 class="section-title">Reasons I <em>Love</em> You</h2>
@@ -391,8 +374,7 @@
           <span id="reasons-seen">0</span> reasons discovered so far
         </div>
       </div>
-    </section>
-</template>
+    </section>  -->
 
     <!-- LOVE TIMELINE -->
     <section class="timeline-section reveal">
@@ -486,8 +468,7 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- ⚖️ FUTURE LAWYER NAINCY — MOTIVATIONAL SECTION -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="lawyer-section reveal">
+    <!-- <section class="lawyer-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ your dream, my pride ✦</span>
         <h2 class="section-title">Future <em>Lawyer</em> Naincy ⚖️</h2>
@@ -539,14 +520,12 @@
           <span class="lawyer-promise-sign">— Your forever supporter, Ankit 💕</span>
         </div>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 💪 DAILY MOTIVATION QUOTES -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="motivation-section reveal">
+    <!-- <section class="motivation-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ daily dose of inspiration ✦</span>
         <h2 class="section-title">Daily <em>Motivation</em> for You</h2>
@@ -565,14 +544,12 @@
           <span>🔄 New Inspiration</span>
         </button>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 📚 STUDY TIMER (POMODORO) -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="study-section reveal">
+    <!-- <section class="study-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ study time ✦</span>
         <h2 class="section-title">Study <em>Timer</em> for My Lawyer 📚</h2>
@@ -618,14 +595,12 @@
           <span class="study-sessions-emoji">🏆</span>
         </div>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 🏆 DREAM BOARD -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="dream-section reveal">
+    <!-- <section class="dream-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ your dreams matter ✦</span>
         <h2 class="section-title">Naincy's <em>Dream</em> Board 🏆</h2>
@@ -682,14 +657,12 @@
           </div>
         </div>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 📝 LOVE LETTER (TYPEWRITER EFFECT) -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="letter-section reveal">
+    <!-- <section class="letter-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ a letter for you ✦</span>
         <h2 class="section-title">My <em>Love</em> Letter 💌</h2>
@@ -708,14 +681,12 @@
           <span>🔄 Read Again</span>
         </button>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- 🌟 I BELIEVE IN YOU — PROMISES -->
     <!-- ═══════════════════════════════════════════════════════ -->
-    <template data-disabled-section>
-<section class="promises-section reveal">
+    <!-- <section class="promises-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ my promises to you ✦</span>
         <h2 class="section-title">I <em>Believe</em> in You 🌟</h2>
@@ -753,12 +724,10 @@
           <p class="promise-text">Through law school, through career, through everything — my love for you will only grow stronger.</p>
         </div>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- LOVE NOTES -->
-    <template data-disabled-section>
-<section class="notes-section reveal">
+    <!-- <section class="notes-section reveal">
       <div class="section-label">
         <span class="section-eyebrow">✦ from the heart ✦</span>
         <h2 class="section-title">Things I <em>Love</em> About You</h2>
@@ -796,12 +765,10 @@
           <span class="note-author">— Always yours</span>
         </div>
       </div>
-    </section>
-</template>
+    </section> -->
 
     <!-- SPECIAL MESSAGE -->
-    <template data-disabled-section>
-<section class="message-section reveal">
+    <!-- <section class="message-section reveal">
       <div class="glass-card message-card">
         <span class="message-quote-mark">"</span>
         <p class="message-text">
@@ -813,8 +780,7 @@
         </p>
         <div class="message-sign">With all my love 💕</div>
       </div>
-    </section>
-</template>
+    </section> -->
 
   </div><!-- /page-wrap -->
 
