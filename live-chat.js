@@ -226,6 +226,11 @@ function toggleChat() {
     const badge = document.querySelector(".chat-notif-badge");
     if (badge) badge.remove();
     updateStreak();
+    
+    // Clear all browser notifications when chat is opened
+    if (typeof ChatNotifications !== "undefined") {
+      ChatNotifications.clearAllNotifications();
+    }
   }
 }
 
@@ -2402,11 +2407,26 @@ function renderMessages(snapshot) {
     messagesDiv.appendChild(div);
   });
 
-  // Sound for new messages
+  // Sound and notifications for new messages
   if (newMsgCount > lastMsgCount && lastMsgCount > 0) {
     const latestMsg = data[sortedKeys[sortedKeys.length - 1]];
     if (latestMsg && latestMsg.sender !== myName) {
       playMsgSound();
+      
+      // Request notification permission and show notification
+      if (typeof ChatNotifications !== "undefined") {
+        // Request permission on first message
+        if (ChatNotifications.getPermission() === "default") {
+          ChatNotifications.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              ChatNotifications.notifyNewMessage(latestMsg.sender, latestMsg.text || "[Media]", false);
+            }
+          });
+        } else if (ChatNotifications.canNotify()) {
+          ChatNotifications.notifyNewMessage(latestMsg.sender, latestMsg.text || "[Media]", false);
+        }
+      }
+      
       const box = document.getElementById("chat-box");
       if (!box || !box.classList.contains("open")) {
         showNotifBadge(unreadCount);
