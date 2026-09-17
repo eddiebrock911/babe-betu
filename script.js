@@ -263,14 +263,6 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// ─── WHATSAPP SHARE ───────────────────────────────────────
-function shareOnWhatsApp() {
-  const text = encodeURIComponent(
-    "💕 Look at this beautiful little world made for Naincy by Ankit 🌸\nhttps://naincykit.onrender.com"
-  );
-  window.open(`https://wa.me/?text=${text}`, "_blank", "noopener");
-}
-
 // ─── LIGHTBOX (legacy support) ────────────────────────────
 function initLightbox() {
   const lb = document.getElementById("lightbox");
