@@ -7,7 +7,7 @@
    - Caches assets for faster loading
    ========================================================= */
 
-const CACHE_NAME = "naincy-chat-v2";
+const CACHE_NAME = "naincy-chat-v4";
 const ASSETS_TO_CACHE = [
   "/",
   "/index.html",
